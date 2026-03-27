@@ -20,6 +20,16 @@ import TypicalDayScreen from "./TypicalDayScreen";
 import SleepDurationScreen from "./SleepDurationScreen";
 import WaterIntakeScreen from "./WaterIntakeScreen";
 import BadHabitsScreen from "./BadHabitsScreen";
+import LifeEventsScreen from "./LifeEventsScreen";
+import LifeEventsResultScreen from "./LifeEventsResultScreen";
+import HeightScreen from "./HeightScreen";
+import PerfectWeightScreen from "./PerfectWeightScreen";
+import ExactAgeScreen from "./ExactAgeScreen";
+import NameScreen from "./NameScreen";
+import WellnessProfileScreen from "./WellnessProfileScreen";
+import WalkingBenefitScreen from "./WalkingBenefitScreen";
+import SpecialOccasionScreen from "./SpecialOccasionScreen";
+import EventDateScreen from "./EventDateScreen";
 import {
   ageQuestion,
   initialGoalOptions,
@@ -38,6 +48,8 @@ import {
   sleepDurationOptions,
   waterIntakeOptions,
   badHabitsOptions,
+  lifeEventsOptions,
+  specialOccasionOptions,
 } from "./QuizData";
 
 export default function TaiChiQuiz() {
@@ -60,50 +72,47 @@ export default function TaiChiQuiz() {
   const [sleepDurationChoices, setSleepDurationChoices] = useState(sleepDurationOptions);
   const [waterIntakeChoices, setWaterIntakeChoices] = useState(waterIntakeOptions);
   const [badHabitsChoices, setBadHabitsChoices] = useState(badHabitsOptions);
+  const [lifeEventsChoices, setLifeEventsChoices] = useState(lifeEventsOptions);
+  const [specialOccasions] = useState(specialOccasionOptions);
 
   function handleAgeSelect(option) {
-    setAnswers((prev) => ({ ...prev, age: option }));
+    setAnswers((prev) => ({ ...prev, ageGroup: option }));
     setScreen("social");
   }
 
   function handleGoalToggle(id) {
     setGoals((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, selected: !item.selected } : item
+      prev.map((goal) =>
+        goal.id === id ? { ...goal, selected: !goal.selected } : goal
       )
     );
   }
 
   function handleGoalsContinue() {
-    const selectedGoals = goals
-      .filter((item) => item.selected)
-      .map((item) => item.label);
-
+    const selectedGoals = goals.filter((goal) => goal.selected).map((goal) => goal.label);
     setAnswers((prev) => ({ ...prev, goals: selectedGoals }));
     setScreen("resultIntro");
   }
 
-  function handleBuildSelect(label) {
+  function handleBuildSelect(option) {
     setBuildChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, build: label }));
+    setAnswers((prev) => ({ ...prev, build: option.label }));
     setScreen("dreamBody");
   }
 
-  function handleDreamBodySelect(label) {
+  function handleDreamBodySelect(option) {
     setDreamBodyChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, dreamBody: label }));
+    setAnswers((prev) => ({ ...prev, dreamBody: option.label }));
     setScreen("targetZones");
   }
 
@@ -116,83 +125,74 @@ export default function TaiChiQuiz() {
   }
 
   function handleTargetZonesContinue() {
-    const selectedZones = targetZones
-      .filter((item) => item.selected)
-      .map((item) => item.label);
-
+    const selectedZones = targetZones.filter((item) => item.selected).map((item) => item.label);
     setAnswers((prev) => ({ ...prev, targetZones: selectedZones }));
     setScreen("bestShape");
   }
 
-  function handleBestShapeSelect(label) {
+  function handleBestShapeSelect(option) {
     setBestShapeChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, bestShape: label }));
+    setAnswers((prev) => ({ ...prev, bestShape: option.label }));
     setScreen("encouragement");
   }
 
-  function handleActivityLevelSelect(label) {
+  function handleActivityLevelSelect(option) {
     setActivityLevels((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, activityLevel: label }));
+    setAnswers((prev) => ({ ...prev, activityLevel: option.label }));
     setScreen("flexibility");
   }
 
-  function handleFlexibilitySelect(label) {
+  function handleFlexibilitySelect(option) {
     setFlexibilityChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, flexibility: label }));
+    setAnswers((prev) => ({ ...prev, flexibility: option.label }));
     setScreen("exercise");
   }
 
-  function handleExerciseSelect(label) {
+  function handleExerciseSelect(option) {
     setExerciseChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, exercise: label }));
+    setAnswers((prev) => ({ ...prev, exercise: option.label }));
     setScreen("stairsFeeling");
   }
 
-  function handleStairsFeelingSelect(label) {
+  function handleStairsFeelingSelect(option) {
     setStairsFeelingChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, stairsFeeling: label }));
+    setAnswers((prev) => ({ ...prev, stairsFeeling: option.label }));
     setScreen("walkFrequency");
   }
 
-  function handleWalkFrequencySelect(label) {
+  function handleWalkFrequencySelect(option) {
     setWalkFrequencyChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, walkFrequency: label }));
+    setAnswers((prev) => ({ ...prev, walkFrequency: option.label }));
     setScreen("struggles");
   }
 
@@ -231,51 +231,47 @@ export default function TaiChiQuiz() {
     setScreen("workload");
   }
 
-  function handleWorkloadSelect(label) {
+  function handleWorkloadSelect(option) {
     setWorkloadChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, workload: label }));
+    setAnswers((prev) => ({ ...prev, workload: option.label }));
     setScreen("typicalDay");
   }
 
-  function handleTypicalDaySelect(label) {
+  function handleTypicalDaySelect(option) {
     setTypicalDayChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, typicalDay: label }));
+    setAnswers((prev) => ({ ...prev, typicalDay: option.label }));
     setScreen("sleepDuration");
   }
 
-  function handleSleepDurationSelect(label) {
+  function handleSleepDurationSelect(option) {
     setSleepDurationChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, sleepDuration: label }));
+    setAnswers((prev) => ({ ...prev, sleepDuration: option.label }));
     setScreen("waterIntake");
   }
 
-  function handleWaterIntakeSelect(label) {
+  function handleWaterIntakeSelect(option) {
     setWaterIntakeChoices((prev) =>
       prev.map((item) => ({
         ...item,
-        selected: item.label === label,
+        selected: item.id === option.id,
       }))
     );
-
-    setAnswers((prev) => ({ ...prev, waterIntake: label }));
+    setAnswers((prev) => ({ ...prev, waterIntake: option.label }));
     setScreen("badHabits");
   }
 
@@ -311,6 +307,81 @@ export default function TaiChiQuiz() {
       .map((item) => item.label);
 
     setAnswers((prev) => ({ ...prev, badHabits: selectedBadHabits }));
+    setScreen("lifeEvents");
+  }
+
+  function handleLifeEventToggle(id) {
+    setLifeEventsChoices((prev) => {
+      const clickedItem = prev.find((item) => item.id === id);
+      const isNoneOption = clickedItem?.label === "No similar event";
+
+      if (isNoneOption) {
+        return prev.map((item) => ({
+          ...item,
+          selected: item.id === id ? !item.selected : false,
+        }));
+      }
+
+      return prev.map((item) => {
+        if (item.id === id) {
+          return { ...item, selected: !item.selected };
+        }
+
+        if (item.label === "No similar event") {
+          return { ...item, selected: false };
+        }
+
+        return item;
+      });
+    });
+  }
+
+  function handleLifeEventsContinue() {
+    const selectedLifeEvents = lifeEventsChoices
+      .filter((item) => item.selected)
+      .map((item) => item.label);
+
+    setAnswers((prev) => ({ ...prev, lifeEvents: selectedLifeEvents }));
+    setScreen("lifeEventsResult");
+  }
+
+  function handleHeightContinue(heightData) {
+    setAnswers((prev) => ({ ...prev, height: heightData }));
+    setScreen("weight");
+  }
+
+  function handleWeightContinue(weightData) {
+    setAnswers((prev) => ({ ...prev, weight: weightData }));
+    setScreen("exactAge");
+  }
+
+  function handleExactAgeContinue(ageValue) {
+    setAnswers((prev) => ({ ...prev, exactAge: ageValue }));
+    setScreen("name");
+  }
+
+  function handleNameContinue(nameValue) {
+    setAnswers((prev) => ({ ...prev, name: nameValue }));
+    setScreen("wellnessProfile");
+  }
+
+  function handleWellnessProfileContinue() {
+    setScreen("walkingBenefit");
+  }
+
+  function handleWalkingBenefitContinue() {
+    setScreen("specialOccasion");
+  }
+
+  function handleSpecialOccasionSelect(option) {
+    setAnswers((prev) => ({ ...prev, specialOccasion: option.label }));
+    setScreen("eventDate");
+  }
+
+  function handleEventDateContinue(eventDate) {
+    setAnswers((prev) => ({ ...prev, eventDate }));
+    console.log("Final answers:", { ...answers, eventDate });
+    // add next screen here later
   }
 
   if (screen === "age") {
@@ -492,6 +563,95 @@ export default function TaiChiQuiz() {
         onToggle={handleBadHabitToggle}
         onContinue={handleBadHabitsContinue}
         onBack={() => setScreen("waterIntake")}
+      />
+    );
+  }
+
+  if (screen === "lifeEvents") {
+    return (
+      <LifeEventsScreen
+        options={lifeEventsChoices}
+        onToggle={handleLifeEventToggle}
+        onContinue={handleLifeEventsContinue}
+        onBack={() => setScreen("badHabits")}
+      />
+    );
+  }
+
+  if (screen === "lifeEventsResult") {
+    return <LifeEventsResultScreen onContinue={() => setScreen("height")} />;
+  }
+
+  if (screen === "height") {
+    return (
+      <HeightScreen
+        onContinue={handleHeightContinue}
+        onBack={() => setScreen("lifeEventsResult")}
+      />
+    );
+  }
+
+  if (screen === "weight") {
+    return (
+      <PerfectWeightScreen
+        onContinue={handleWeightContinue}
+        onBack={() => setScreen("height")}
+      />
+    );
+  }
+
+  if (screen === "exactAge") {
+    return (
+      <ExactAgeScreen
+        onContinue={handleExactAgeContinue}
+        onBack={() => setScreen("weight")}
+      />
+    );
+  }
+
+  if (screen === "name") {
+    return (
+      <NameScreen
+        onContinue={handleNameContinue}
+        onBack={() => setScreen("exactAge")}
+      />
+    );
+  }
+
+  if (screen === "wellnessProfile") {
+    return (
+      <WellnessProfileScreen
+        answers={answers}
+        onContinue={handleWellnessProfileContinue}
+        onBack={() => setScreen("name")}
+      />
+    );
+  }
+
+  if (screen === "walkingBenefit") {
+    return (
+      <WalkingBenefitScreen
+        onContinue={handleWalkingBenefitContinue}
+        onBack={() => setScreen("wellnessProfile")}
+      />
+    );
+  }
+
+  if (screen === "specialOccasion") {
+    return (
+      <SpecialOccasionScreen
+        options={specialOccasions}
+        onSelect={handleSpecialOccasionSelect}
+        onBack={() => setScreen("walkingBenefit")}
+      />
+    );
+  }
+
+  if (screen === "eventDate") {
+    return (
+      <EventDateScreen
+        onContinue={handleEventDateContinue}
+        onBack={() => setScreen("specialOccasion")}
       />
     );
   }

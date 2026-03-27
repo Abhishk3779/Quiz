@@ -178,3 +178,79 @@ export const badHabitsOptions = [
     selected: false,
   },
 ];
+
+export const lifeEventsOptions = [
+  {
+    id: 1,
+    label: "Marriage or relationship",
+    emoji: "💑",
+    selected: false,
+  },
+  {
+    id: 2,
+    label: "Busy work schedule",
+    emoji: "👩‍💻",
+    selected: false,
+  },
+  {
+    id: 3,
+    label: "Stress or mental health",
+    emoji: "🤯",
+    selected: false,
+  },
+  {
+    id: 4,
+    label: "Pregnancy",
+    emoji: "🤰",
+    selected: false,
+  },
+  {
+    id: 5,
+    label: "Meds or hormonal disorder",
+    emoji: "💊",
+    selected: false,
+  },
+  {
+    id: 6,
+    label: "No similar event",
+    emoji: "",
+    selected: false,
+  },
+];
+export const specialOccasionOptions = [
+  {
+    id: "vacation",
+    label: "Vacation",
+    emoji: "🙂",
+  },
+  {
+    id: "sporting-event",
+    label: "Sporting event",
+    emoji: "🥇",
+  },
+  {
+    id: "beach-trip",
+    label: "Beach trip",
+    emoji: "👙",
+  },
+  {
+    id: "wedding",
+    label: "Wedding",
+    emoji: "🍾",
+  },
+  {
+    id: "family-occasion",
+    label: "Family occasion",
+    emoji: "👨‍👩‍👧",
+  },
+  {
+    id: "reunion",
+    label: "Reunion",
+    emoji: "👊",
+  },
+  {
+    id: "no-similar-events",
+    label: "No similar events",
+    emoji: "✖",
+  },
+];
