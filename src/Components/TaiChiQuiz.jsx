@@ -9,6 +9,7 @@ import DreamBodyScreen from "./DreamBodyScreen";
 import TargetZonesScreen from "./TargetZonesScreen";
 import BestShapeScreen from "./BestShapeScreen";
 import EncouragementScreen from "./EncouragementScreen";
+import ActivityLevelScreen from "./ActivityLevelScreen";
 import {
   ageQuestion,
   initialGoalOptions,
@@ -16,6 +17,7 @@ import {
   dreamBodyOptions,
   targetZoneOptions,
   bestShapeOptions,
+  activityLevelOptions,
 } from "./QuizData";
 
 export default function TaiChiQuiz() {
@@ -26,6 +28,7 @@ export default function TaiChiQuiz() {
   const [dreamBodyChoices, setDreamBodyChoices] = useState(dreamBodyOptions);
   const [targetZones, setTargetZones] = useState(targetZoneOptions);
   const [bestShapeChoices, setBestShapeChoices] = useState(bestShapeOptions);
+  const [activityLevels, setActivityLevels] = useState(activityLevelOptions);
 
   function handleAgeSelect(option) {
     setAnswers((prev) => ({ ...prev, age: option }));
@@ -102,6 +105,17 @@ export default function TaiChiQuiz() {
     setScreen("encouragement");
   }
 
+  function handleActivityLevelSelect(label) {
+    setActivityLevels((prev) =>
+      prev.map((item) => ({
+        ...item,
+        selected: item.label === label,
+      }))
+    );
+
+    setAnswers((prev) => ({ ...prev, activityLevel: label }));
+  }
+
   if (screen === "age") {
     return <AgeScreen question={ageQuestion} onSelect={handleAgeSelect} />;
   }
@@ -172,9 +186,17 @@ export default function TaiChiQuiz() {
   if (screen === "encouragement") {
     return (
       <EncouragementScreen
-        onContinue={() => {
-          // next screen here
-        }}
+        onContinue={() => setScreen("activityLevel")}
+      />
+    );
+  }
+
+  if (screen === "activityLevel") {
+    return (
+      <ActivityLevelScreen
+        options={activityLevels}
+        onSelect={handleActivityLevelSelect}
+        onBack={() => setScreen("encouragement")}
       />
     );
   }

@@ -38,3 +38,9 @@ export const bestShapeOptions = [
   { id: 3, label: "> 3 years ago", emoji: "🥲", selected: false },
   { id: 4, label: "Never", emoji: "✖", selected: false },
 ];
+
+export const activityLevelOptions = [
+  { id: 1, label: "Advanced", emoji: "😎", selected: false },
+  { id: 2, label: "Intermediate", emoji: "🤔", selected: false },
+  { id: 3, label: "Beginner", emoji: "🤷‍♀️", selected: false },
+];
