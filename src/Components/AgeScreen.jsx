@@ -1,4 +1,5 @@
 import { ArrowIcon, GlobeIcon, CheckIcon } from "./icons";
+import Women1 from '../assets/Women.webp';
 
 export default function AgeScreen({ question, onSelect }) {
   return (
@@ -15,20 +16,21 @@ export default function AgeScreen({ question, onSelect }) {
           </span>
         </div>
 
-        <h1 className="mt-7 max-w-[560px] text-center text-[34px] font-extrabold leading-[1.18] tracking-[-0.02em] text-black md:text-[42px]">
+        <h1 className="mt-7 max-w-[760px] text-center text-[34px] font-bold leading-[1.18] tracking-[-0.02em] text-black md:text-[24px]">
           {question.title}
         </h1>
 
         <div className="mt-10 flex w-full max-w-[760px] flex-col items-center justify-center gap-10 md:flex-row md:items-center md:justify-center">
           <div className="flex justify-center md:w-[300px]">
             <img
-              src=""
+              src={Women1}
               alt="WomanFigure"
               className="h-auto w-[210px] object-contain md:w-[250px] lg:w-[290px]"
             />
           </div>
 
           <div className="w-full max-w-[320px] space-y-3">
+            <h4 className="font-semibold">Which age group are you in?</h4>
             {question.options.map((option, i) => (
               <button
                 key={i}
@@ -50,8 +52,8 @@ export default function AgeScreen({ question, onSelect }) {
         </div>
 
         <div className="mt-4 flex max-w-[560px] items-start justify-center gap-3 text-center md:text-left">
-          <div className="mt-[2px] flex h-[22px] w-[22px] min-w-[22px] items-center justify-center rounded-md bg-[#3b9b5d]">
-            <CheckIcon />
+          <div className="mt-[2px] flex h-[22px] w-[22px] min-w-[22px] text-red items-center justify-center rounded-md">
+            <input type="checkbox" name="" id="" className="w-[30px]"/>
           </div>
 
           <p className="text-[13px] leading-[1.55] text-[#6f6f6f]">

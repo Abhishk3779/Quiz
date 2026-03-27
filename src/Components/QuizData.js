@@ -1,20 +1,26 @@
+import img1 from '../assets/Lose-weight.png';
+import img2 from '../assets/Improve-heart-health.png';
+import img3 from '../assets/Get-more-toned.png';
+import img4 from '../assets/Feel-younger.png';
+
+
 export const ageQuestion = {
   id: "age",
   badge: "1-minute quiz",
-  badgeSub: "ACCORDING TO YOUR AGE",
-  title: "Tai Chi Indoor Walking 28-Day Challenge for Weight Loss",
-  options: ["18-29 y.o.", "30-39 y.o.", "40-49 y.o.", "50+ y.o."],
+  badgeSub: "to Find Your Personal Tai Chi Indoor Walking Plan",
+  title: "TAICHI COACH creates a simple, personalized indoor walking plan for weight loss",
+  options: ["18-29", "30-39", "40-49", "50+"],
 };
 
 export const initialGoalOptions = [
-  { id: 1, label: "Lose weight", selected: true },
-  { id: 2, label: "Improve heart health", selected: true },
-  { id: 3, label: "Get firm and toned", selected: true },
-  { id: 4, label: "Lower biological age", selected: false },
+  { id: 1, label: "Lose weight", selected: false, image: img1 },
+  { id: 2, label: "Improve heart health", selected: false, image: img2 },
+  { id: 3, label: "Get more toned", selected: false, image: img3 },
+  { id: 4, label: "Feel younger and more energized", selected: false, image: img4 },
 ];
 
 export const buildOptions = [
-  { id: 1, label: "Mid-sized", selected: true },
+  { id: 1, label: "Mid-sized", selected: false },
   { id: 2, label: "On a heavier side", selected: false },
   { id: 3, label: "Overweight", selected: false },
 ];

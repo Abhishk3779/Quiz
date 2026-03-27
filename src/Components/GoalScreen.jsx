@@ -1,33 +1,31 @@
+
 function GoalCard({ option, onToggle }) {
   return (
     <button
       onClick={() => onToggle(option.id)}
-      className={`flex w-full items-center justify-between overflow-hidden rounded-[14px] px-5 py-0 transition ${
-        option.selected ? "bg-[#3b9b5d]" : "bg-[#ecebe7]"
-      }`}
+      className={`flex w-full items-center justify-between overflow-hidden rounded-[14px] px-5 py-0 transition ${option.selected ? "bg-[#3b9b5d]" : "bg-[#ecebe7]"
+        }`}
     >
       <div className="flex items-center gap-4">
         <div
-          className={`flex h-[28px] w-[28px] items-center justify-center rounded-full text-[18px] font-semibold ${
-            option.selected
-              ? "bg-white text-[#3b9b5d]"
-              : "bg-transparent text-[#9a9a9a]"
-          }`}
+          className={`flex h-[28px] w-[28px] items-center justify-center rounded-full text-[18px] font-semibold ${option.selected
+            ? "bg-white text-[#3b9b5d]"
+            : "bg-transparent text-[#9a9a9a]"
+            }`}
         >
           {option.selected ? "✓" : "+"}
         </div>
 
         <span
-          className={`text-[16px] font-semibold md:text-[18px] ${
-            option.selected ? "text-white" : "text-black"
-          }`}
+          className={`text-[16px] font-semibold md:text-[18px] ${option.selected ? "text-white" : "text-black"
+            }`}
         >
           {option.label}
         </span>
       </div>
 
       <img
-        src=""
+        src={option.image}
         alt={option.label}
         className="h-[82px] w-[82px] shrink-0 object-contain"
       />
@@ -46,12 +44,12 @@ export default function GoalScreen({ goals, onToggle, onContinue }) {
       </div>
 
       <div className="mx-auto mt-10 max-w-[760px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.2] text-black md:text-[36px]">
-          What is your primary goal?
+        <h2 className="text-center text-[30px] font-bold leading-[1.2] text-black md:text-[28px]">
+          What are your main goals?
         </h2>
 
-        <p className="mt-3 text-center text-[18px] text-[#6b6b6b]">
-          You can select multiple goals
+        <p className="mt-3 text-center text-[16px] text-[#6b6b6b]">
+          You can choose more than one
         </p>
 
         <div className="mt-8 space-y-4">
