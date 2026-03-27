@@ -44,3 +44,58 @@ export const activityLevelOptions = [
   { id: 2, label: "Intermediate", emoji: "🤔", selected: false },
   { id: 3, label: "Beginner", emoji: "🤷‍♀️", selected: false },
 ];
+
+export const flexibilityOptions = [
+  { id: 1, label: "Pretty Flexible", emoji: "💪", selected: false },
+  { id: 2, label: "Just getting started", emoji: "👍", selected: false },
+  { id: 3, label: "Not that good", emoji: "👌", selected: false },
+  { id: 4, label: "Not sure", emoji: "💪", selected: false },
+];
+
+export const exerciseOptions = [
+  { id: 1, label: "Almost every day", selected: false },
+  { id: 2, label: "Several times per week", selected: false },
+  { id: 3, label: "Several times per month", selected: false },
+];
+
+export const stairsFeelingOptions = [
+  { id: 1, label: "I feel short of breath", emoji: "🤷‍♀️", selected: false },
+  {
+    id: 2,
+    label: "I feel slightly winded, but I’m okay",
+    emoji: "🥲",
+    selected: true,
+  },
+  {
+    id: 3,
+    label: "I feel fine after one flight of stairs",
+    emoji: "👌",
+    selected: false,
+  },
+  {
+    id: 4,
+    label: "I can easily climb 3-5 flights of stairs",
+    emoji: "💪",
+    selected: false,
+  },
+];
+
+export const walkFrequencyOptions = [
+  { id: 1, label: "Almost every day", emoji: "💪", selected: false },
+  { id: 2, label: "2-3 times per week", emoji: "👍", selected: false },
+  { id: 3, label: "More like once a month", emoji: "👌", selected: false },
+];
+
+export const strugglesOptions = [
+  { id: 1, label: "Sensitive back", selected: false },
+  { id: 2, label: "Sensitive knees", selected: false },
+  { id: 3, label: "Sensitive elbows", selected: false },
+  { id: 4, label: "None of the above", selected: false },
+];
+
+export const workloadOptions = [
+  { id: 1, label: "9 to 5", emoji: "🌞", selected: false },
+  { id: 2, label: "Night shifts", emoji: "🌘", selected: false },
+  { id: 3, label: "It’s fairly flexible", emoji: "🙂", selected: false },
+  { id: 4, label: "I’m retired", emoji: "🌴", selected: false },
+];
