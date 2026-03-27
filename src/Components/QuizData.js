@@ -99,3 +99,9 @@ export const workloadOptions = [
   { id: 3, label: "It’s fairly flexible", emoji: "🙂", selected: false },
   { id: 4, label: "I’m retired", emoji: "🌴", selected: false },
 ];
+
+export const typicalDayOptions = [
+  { id: 1, label: "I'm on my feet all day long", emoji: "🏃", selected: false },
+  { id: 2, label: "I take active breaks", emoji: "✌", selected: false },
+  { id: 3, label: "I spend most of the day sitting", emoji: "👩‍💻", selected: false },
+];

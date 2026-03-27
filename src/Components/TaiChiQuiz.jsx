@@ -16,6 +16,7 @@ import StairsFeelingScreen from "./StairsFeelingScreen";
 import WalkFrequencyScreen from "./WalkFrequencyScreen";
 import StrugglesScreen from "./StrugglesScreen";
 import WorkloadScreen from "./WorkloadScreen";
+import TypicalDayScreen from "./TypicalDayScreen";
 import {
   ageQuestion,
   initialGoalOptions,
@@ -30,6 +31,7 @@ import {
   walkFrequencyOptions,
   strugglesOptions,
   workloadOptions,
+  typicalDayOptions,
 } from "./QuizData";
 
 export default function TaiChiQuiz() {
@@ -48,6 +50,7 @@ export default function TaiChiQuiz() {
   const [walkFrequencyChoices, setWalkFrequencyChoices] = useState(walkFrequencyOptions);
   const [strugglesChoices, setStrugglesChoices] = useState(strugglesOptions);
   const [workloadChoices, setWorkloadChoices] = useState(workloadOptions);
+  const [typicalDayChoices, setTypicalDayChoices] = useState(typicalDayOptions);
 
   function handleAgeSelect(option) {
     setAnswers((prev) => ({ ...prev, age: option }));
@@ -228,6 +231,18 @@ export default function TaiChiQuiz() {
     );
 
     setAnswers((prev) => ({ ...prev, workload: label }));
+    setScreen("typicalDay");
+  }
+
+  function handleTypicalDaySelect(label) {
+    setTypicalDayChoices((prev) =>
+      prev.map((item) => ({
+        ...item,
+        selected: item.label === label,
+      }))
+    );
+
+    setAnswers((prev) => ({ ...prev, typicalDay: label }));
   }
 
   if (screen === "age") {
@@ -368,6 +383,16 @@ export default function TaiChiQuiz() {
         options={workloadChoices}
         onSelect={handleWorkloadSelect}
         onBack={() => setScreen("struggles")}
+      />
+    );
+  }
+
+  if (screen === "typicalDay") {
+    return (
+      <TypicalDayScreen
+        options={typicalDayChoices}
+        onSelect={handleTypicalDaySelect}
+        onBack={() => setScreen("workload")}
       />
     );
   }
