@@ -103,5 +103,78 @@ export const workloadOptions = [
 export const typicalDayOptions = [
   { id: 1, label: "I'm on my feet all day long", emoji: "🏃", selected: false },
   { id: 2, label: "I take active breaks", emoji: "✌", selected: false },
-  { id: 3, label: "I spend most of the day sitting", emoji: "👩‍💻", selected: false },
+  {
+    id: 3,
+    label: "I spend most of the day sitting",
+    emoji: "👩‍💻",
+    selected: false,
+  },
+];
+
+export const sleepDurationOptions = [
+  { id: 1, label: "I sleep less than 5 hours", emoji: "😴", selected: false },
+  { id: 2, label: "I sleep around 5-6 hours", emoji: "💤", selected: false },
+  { id: 3, label: "I sleep well for 7-8 hours", emoji: "💪", selected: false },
+  {
+    id: 4,
+    label: "I like to sleep longer than 8 hours",
+    emoji: "🤷‍♀️",
+    selected: false,
+  },
+];
+
+export const waterIntakeOptions = [
+  { id: 1, label: "About 2 glasses (16 oz)", emoji: "💧", selected: false },
+  {
+    id: 2,
+    label: "Between 2 - 6 glasses (17 - 51 oz)",
+    emoji: "💦",
+    selected: false,
+  },
+  {
+    id: 3,
+    label: "More than 6 glasses (51 oz >)",
+    emoji: "😎",
+    selected: false,
+  },
+  { id: 4, label: "I drink only coffee or tea", emoji: "☕", selected: false },
+];
+
+export const badHabitsOptions = [
+  {
+    id: 1,
+    label: "I have trouble getting enough sleep",
+    emoji: "😴",
+    selected: false,
+  },
+  {
+    id: 2,
+    label: "I find it hard to reduce my sugar intake",
+    emoji: "🍫",
+    selected: false,
+  },
+  {
+    id: 3,
+    label: "I have an addiction to soda",
+    emoji: "🥤",
+    selected: false,
+  },
+  {
+    id: 4,
+    label: "I consume a lot of salty foods",
+    emoji: "🧂",
+    selected: false,
+  },
+  {
+    id: 5,
+    label: "I’m a midnight snacker",
+    emoji: "🌘",
+    selected: false,
+  },
+  {
+    id: 6,
+    label: "None of the above",
+    emoji: "",
+    selected: false,
+  },
 ];

@@ -17,6 +17,9 @@ import WalkFrequencyScreen from "./WalkFrequencyScreen";
 import StrugglesScreen from "./StrugglesScreen";
 import WorkloadScreen from "./WorkloadScreen";
 import TypicalDayScreen from "./TypicalDayScreen";
+import SleepDurationScreen from "./SleepDurationScreen";
+import WaterIntakeScreen from "./WaterIntakeScreen";
+import BadHabitsScreen from "./BadHabitsScreen";
 import {
   ageQuestion,
   initialGoalOptions,
@@ -32,6 +35,9 @@ import {
   strugglesOptions,
   workloadOptions,
   typicalDayOptions,
+  sleepDurationOptions,
+  waterIntakeOptions,
+  badHabitsOptions,
 } from "./QuizData";
 
 export default function TaiChiQuiz() {
@@ -51,6 +57,9 @@ export default function TaiChiQuiz() {
   const [strugglesChoices, setStrugglesChoices] = useState(strugglesOptions);
   const [workloadChoices, setWorkloadChoices] = useState(workloadOptions);
   const [typicalDayChoices, setTypicalDayChoices] = useState(typicalDayOptions);
+  const [sleepDurationChoices, setSleepDurationChoices] = useState(sleepDurationOptions);
+  const [waterIntakeChoices, setWaterIntakeChoices] = useState(waterIntakeOptions);
+  const [badHabitsChoices, setBadHabitsChoices] = useState(badHabitsOptions);
 
   function handleAgeSelect(option) {
     setAnswers((prev) => ({ ...prev, age: option }));
@@ -243,6 +252,65 @@ export default function TaiChiQuiz() {
     );
 
     setAnswers((prev) => ({ ...prev, typicalDay: label }));
+    setScreen("sleepDuration");
+  }
+
+  function handleSleepDurationSelect(label) {
+    setSleepDurationChoices((prev) =>
+      prev.map((item) => ({
+        ...item,
+        selected: item.label === label,
+      }))
+    );
+
+    setAnswers((prev) => ({ ...prev, sleepDuration: label }));
+    setScreen("waterIntake");
+  }
+
+  function handleWaterIntakeSelect(label) {
+    setWaterIntakeChoices((prev) =>
+      prev.map((item) => ({
+        ...item,
+        selected: item.label === label,
+      }))
+    );
+
+    setAnswers((prev) => ({ ...prev, waterIntake: label }));
+    setScreen("badHabits");
+  }
+
+  function handleBadHabitToggle(id) {
+    setBadHabitsChoices((prev) => {
+      const clickedItem = prev.find((item) => item.id === id);
+      const isNoneOption = clickedItem?.label === "None of the above";
+
+      if (isNoneOption) {
+        return prev.map((item) => ({
+          ...item,
+          selected: item.id === id ? !item.selected : false,
+        }));
+      }
+
+      return prev.map((item) => {
+        if (item.id === id) {
+          return { ...item, selected: !item.selected };
+        }
+
+        if (item.label === "None of the above") {
+          return { ...item, selected: false };
+        }
+
+        return item;
+      });
+    });
+  }
+
+  function handleBadHabitsContinue() {
+    const selectedBadHabits = badHabitsChoices
+      .filter((item) => item.selected)
+      .map((item) => item.label);
+
+    setAnswers((prev) => ({ ...prev, badHabits: selectedBadHabits }));
   }
 
   if (screen === "age") {
@@ -393,6 +461,37 @@ export default function TaiChiQuiz() {
         options={typicalDayChoices}
         onSelect={handleTypicalDaySelect}
         onBack={() => setScreen("workload")}
+      />
+    );
+  }
+
+  if (screen === "sleepDuration") {
+    return (
+      <SleepDurationScreen
+        options={sleepDurationChoices}
+        onSelect={handleSleepDurationSelect}
+        onBack={() => setScreen("typicalDay")}
+      />
+    );
+  }
+
+  if (screen === "waterIntake") {
+    return (
+      <WaterIntakeScreen
+        options={waterIntakeChoices}
+        onSelect={handleWaterIntakeSelect}
+        onBack={() => setScreen("sleepDuration")}
+      />
+    );
+  }
+
+  if (screen === "badHabits") {
+    return (
+      <BadHabitsScreen
+        options={badHabitsChoices}
+        onToggle={handleBadHabitToggle}
+        onContinue={handleBadHabitsContinue}
+        onBack={() => setScreen("waterIntake")}
       />
     );
   }
