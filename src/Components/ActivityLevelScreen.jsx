@@ -35,8 +35,8 @@ export default function ActivityLevelScreen({ options, onSelect, onBack }) {
         </div>
       </div>
 
-      <div className="mx-auto mt-10 max-w-[760px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.2] text-black md:text-[36px]">
+      <div className="mx-auto mt-10 max-w-[600px]">
+        <h2 className="text-center text-[30px] font-bold leading-[1.2] text-black md:text-[24px]">
           What is your activity level?
         </h2>
 

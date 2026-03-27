@@ -2,6 +2,12 @@ import img1 from '../assets/Lose-weight.png';
 import img2 from '../assets/Improve-heart-health.png';
 import img3 from '../assets/Get-more-toned.png';
 import img4 from '../assets/Feel-younger.png';
+import img5 from '../assets/better.png';
+import img6 from '../assets/middle.png';
+import img7 from '../assets/heavy.png';
+import img8 from '../assets/lighter.png';
+import img9 from '../assets/toned.png';
+import img10 from '../assets/balanced.png';
 
 
 export const ageQuestion = {
@@ -20,15 +26,15 @@ export const initialGoalOptions = [
 ];
 
 export const buildOptions = [
-  { id: 1, label: "Mid-sized", selected: false },
-  { id: 2, label: "On a heavier side", selected: false },
-  { id: 3, label: "Overweight", selected: false },
+  { id: 1, label: "In the middle", selected: false ,image : img5},
+  { id: 2, label: "A bit heavier than I want", selected: false ,image : img6},
+  { id: 3, label: "Much heavier than I want", selected: false ,image : img7},
 ];
 
 export const dreamBodyOptions = [
-  { id: 1, label: "Thin", selected: false },
-  { id: 2, label: "Toned", selected: false },
-  { id: 3, label: "Curvy", selected: false },
+  { id: 1, label: "Lighter and more comfortable", selected: false ,image : img8, },
+  { id: 2, label: "More toned and a bit stronger", selected: false,image : img9 },
+  { id: 3, label: "Balanced and confident in my shape", selected: false ,image : img10 },
 ];
 
 export const targetZoneOptions = [
@@ -39,23 +45,23 @@ export const targetZoneOptions = [
 ];
 
 export const bestShapeOptions = [
-  { id: 1, label: "<1 year ago", emoji: "🤔", selected: false },
+  { id: 1, label: "Less than 1 year ago", emoji: "🤔", selected: false },
   { id: 2, label: "1–2 years ago", emoji: "😅", selected: false },
-  { id: 3, label: "> 3 years ago", emoji: "🥲", selected: false },
-  { id: 4, label: "Never", emoji: "✖", selected: false },
+  { id: 3, label: ">More than 3 years ago", emoji: "🥲", selected: false },
+  { id: 4, label: "I have never felt that way", emoji: "✖", selected: false },
 ];
 
 export const activityLevelOptions = [
-  { id: 1, label: "Advanced", emoji: "😎", selected: false },
-  { id: 2, label: "Intermediate", emoji: "🤔", selected: false },
-  { id: 3, label: "Beginner", emoji: "🤷‍♀️", selected: false },
+  { id: 1, label: "Very active", emoji: "😎", selected: false },
+  { id: 2, label: "Somewhat active", emoji: "🤔", selected: false },
+  { id: 3, label: "Just starting", emoji: "🤷‍♀️", selected: false },
 ];
 
 export const flexibilityOptions = [
-  { id: 1, label: "Pretty Flexible", emoji: "💪", selected: false },
-  { id: 2, label: "Just getting started", emoji: "👍", selected: false },
-  { id: 3, label: "Not that good", emoji: "👌", selected: false },
-  { id: 4, label: "Not sure", emoji: "💪", selected: false },
+  { id: 1, label: "Quite flexible", emoji: "💪", selected: false },
+  { id: 2, label: "A little flexible", emoji: "👍", selected: false },
+  { id: 3, label: "Not very flexible", emoji: "👌", selected: false },
+  { id: 4, label: "I’m not sure", emoji: "💪", selected: false },
 ];
 
 export const exerciseOptions = [

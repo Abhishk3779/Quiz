@@ -2,7 +2,7 @@ function BuildOptionCard({ option, onSelect }) {
   return (
     <button
       onClick={() => onSelect(option.label)}
-      className={`flex w-full items-center justify-between overflow-hidden rounded-[14px] px-5 py-0 transition ${
+      className={`flex w-[80%] mx-auto items-center justify-between overflow-hidden rounded-[14px] px-5 py-0 transition ${
         option.selected ? "bg-[#3b9b5d]" : "bg-[#ecebe7]"
       }`}
     >
@@ -15,7 +15,7 @@ function BuildOptionCard({ option, onSelect }) {
       </span>
 
       <img
-        src=""
+        src={option.image}
         alt={option.label}
         className="h-[90px] w-[90px] shrink-0 object-contain"
       />
@@ -40,8 +40,8 @@ export default function BuildScreen({ options, onSelect, onBack }) {
       </div>
 
       <div className="mx-auto mt-10 max-w-[760px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.2] text-black md:text-[36px]">
-          How would you describe your physical build?
+        <h2 className="text-center text-[30px] font-bold leading-[1.2] text-black md:text-[22px]">
+          How would you describe your body now?
         </h2>
 
         <div className="mt-8 space-y-4">

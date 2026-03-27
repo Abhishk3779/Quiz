@@ -15,15 +15,15 @@ export default function ResultIntroScreen({ onContinue }) {
           Results will vary based on your consistency and individual factors.
         </p>
 
-        <h2 className="mt-8 text-center text-[28px] font-bold leading-[1.2] text-black md:text-[26px]">
+        <h2 className="mt-8 text-center text-[28px] font-bold leading-[1.2] text-black md:text-[22px]">
           Great start — you’re on your way.
         </h2>
 
-        <p className="mt-4 max-w-[500px] text-center text-[14px] leading-[1.6] text-[#2f2f2f]">
+        <p className="mt-4 max-w-[500px] text-center text-[12px] leading-[1.6] text-[#2f2f2f]">
          With TAICHI COACH, you’ll get a guided, personalized approach that adapts to you, so you always know what to do next, without overthinking it.
         </p>
 
-        <div className="w-full max-w-[510px] pt-20">
+        <div className="w-full max-w-[510px] pt-10">
           <button
             onClick={onContinue}
             className="w-full rounded-[14px] bg-[#3b9b5d] py-3 text-[18px] font-bold text-white transition hover:bg-[#318451]"

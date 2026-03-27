@@ -2,7 +2,7 @@ function BestShapeOptionCard({ option, onSelect }) {
   return (
     <button
       onClick={() => onSelect(option.label)}
-      className={`flex min-h-[74px] w-full items-center justify-between rounded-[14px] px-7 transition ${
+      className={`flex min-h-[74px] w-[80%] mx-auto items-center justify-between rounded-[14px] px-7 transition ${
         option.selected ? "bg-[#3b9b5d]" : "bg-[#ecebe7]"
       }`}
     >
@@ -36,8 +36,8 @@ export default function BestShapeScreen({ options, onSelect, onBack }) {
       </div>
 
       <div className="mx-auto mt-10 max-w-[760px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.2] text-black md:text-[36px]">
-          How long ago were you in the best shape of your life?
+        <h2 className="text-center text-[30px] font-bold leading-[1.2] text-black md:text-[24px]">
+          When did you last feel in your best shape?
         </h2>
 
         <div className="mt-8 space-y-4">

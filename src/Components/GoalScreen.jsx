@@ -50,7 +50,7 @@ export default function GoalScreen({ goals, onToggle, onContinue }) {
       </div>
 
       <div className="mx-auto mt-10 max-w-[760px]">
-        <h2 className="text-center text-[30px] font-bold leading-[1.2] text-black md:text-[28px]">
+        <h2 className="text-center text-[30px] font-bold leading-[1.2] text-black md:text-[22px]">
           What are your main goals?
         </h2>
 
