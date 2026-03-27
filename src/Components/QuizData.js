@@ -18,3 +18,23 @@ export const buildOptions = [
   { id: 2, label: "On a heavier side", selected: false },
   { id: 3, label: "Overweight", selected: false },
 ];
+
+export const dreamBodyOptions = [
+  { id: 1, label: "Thin", selected: false },
+  { id: 2, label: "Toned", selected: false },
+  { id: 3, label: "Curvy", selected: false },
+];
+
+export const targetZoneOptions = [
+  { id: 1, label: "Arms", selected: false },
+  { id: 2, label: "Abs", selected: false },
+  { id: 3, label: "Booty", selected: false },
+  { id: 4, label: "Legs", selected: false },
+];
+
+export const bestShapeOptions = [
+  { id: 1, label: "<1 year ago", emoji: "🤔", selected: false },
+  { id: 2, label: "1–2 years ago", emoji: "😅", selected: false },
+  { id: 3, label: "> 3 years ago", emoji: "🥲", selected: false },
+  { id: 4, label: "Never", emoji: "✖", selected: false },
+];
