@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-export default function EventDateScreen({ onContinue, onBack }) {
+export default function EventDateScreen({ onContinue, onBack, initialDate = "" }) {
   const today = useMemo(() => {
     const now = new Date();
     const year = now.getFullYear();
@@ -9,7 +9,7 @@ export default function EventDateScreen({ onContinue, onBack }) {
     return `${year}-${month}-${day}`;
   }, []);
 
-  const [date, setDate] = useState(today);
+  const [date, setDate] = useState(initialDate || today);
 
   const formattedDate = useMemo(() => formatDisplayDate(date), [date]);
 
@@ -48,7 +48,7 @@ export default function EventDateScreen({ onContinue, onBack }) {
         </h2>
 
         <p className="mt-2 max-w-[560px] text-center text-[14px] leading-[1.4] text-[#3d3d3d]">
-          Once we know this, we'll be able to put together a personalized plan
+          Once we know this, we&apos;ll be able to put together a personalized plan
           to help you get in shape. Your data will not be shared with any third
           parties.
         </p>

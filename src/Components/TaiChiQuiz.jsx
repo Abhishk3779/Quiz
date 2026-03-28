@@ -24,13 +24,17 @@ import LifeEventsScreen from "./LifeEventsScreen";
 import LifeEventsResultScreen from "./LifeEventsResultScreen";
 import HeightScreen from "./HeightScreen";
 import PerfectWeightScreen from "./PerfectWeightScreen";
-import GoalWeightScreen from "./GoalWeightScreen"; // Imported New Component
+import GoalWeightScreen from "./GoalWeightScreen";
 import ExactAgeScreen from "./ExactAgeScreen";
 import NameScreen from "./NameScreen";
 import WellnessProfileScreen from "./WellnessProfileScreen";
 import WalkingBenefitScreen from "./WalkingBenefitScreen";
 import SpecialOccasionScreen from "./SpecialOccasionScreen";
 import EventDateScreen from "./EventDateScreen";
+import GoalProjectionScreen from "./GoalProjectionScreen";
+import PlanLoadingScreen from "./PlanLoadingScreen";
+import EmailCaptureScreen from "./EmailCaptureScreen";
+import EmailSentScreen from "./EmailSentScreen";
 import {
   ageQuestion,
   initialGoalOptions,
@@ -75,6 +79,7 @@ export default function TaiChiQuiz() {
   const [badHabitsChoices, setBadHabitsChoices] = useState(badHabitsOptions);
   const [lifeEventsChoices, setLifeEventsChoices] = useState(lifeEventsOptions);
   const [specialOccasions] = useState(specialOccasionOptions);
+  const [sentEmail, setSentEmail] = useState("");
 
   function handleAgeSelect(option) {
     setAnswers((prev) => ({ ...prev, ageGroup: option }));
@@ -347,19 +352,41 @@ export default function TaiChiQuiz() {
   }
 
   function handleHeightContinue(heightData) {
-    setAnswers((prev) => ({ ...prev, height: heightData }));
+    setAnswers((prev) => ({
+      ...prev,
+      height: {
+        unit: heightData.unit,
+        value: heightData.value,
+        meters: heightData.meters,
+        displayValue: heightData.displayValue,
+        consent: heightData.consent,
+      },
+    }));
     setScreen("weight");
   }
 
   function handleWeightContinue(weightData) {
-    // Save current weight (value and unit)
-    setAnswers((prev) => ({ ...prev, currentWeight: weightData }));
+    setAnswers((prev) => ({
+      ...prev,
+      currentWeight: {
+        value: weightData.value,
+        unit: weightData.unit,
+        kg: weightData.kg,
+        bmi: weightData.bmi,
+      },
+    }));
     setScreen("goalWeight");
   }
 
   function handleGoalWeightContinue(goalData) {
-    // Save the perfect/goal weight data
-    setAnswers((prev) => ({ ...prev, goalWeight: goalData }));
+    setAnswers((prev) => ({
+      ...prev,
+      goalWeight: {
+        value: goalData.value,
+        unit: goalData.unit,
+        kg: goalData.kg,
+      },
+    }));
     setScreen("exactAge");
   }
 
@@ -367,6 +394,7 @@ export default function TaiChiQuiz() {
     setAnswers((prev) => ({ ...prev, exactAge: ageValue }));
     setScreen("name");
   }
+
   function handleNameContinue(nameValue) {
     setAnswers((prev) => ({ ...prev, name: nameValue }));
     setScreen("wellnessProfile");
@@ -386,10 +414,15 @@ export default function TaiChiQuiz() {
   }
 
   function handleEventDateContinue(eventDate) {
-    setAnswers((prev) => ({ ...prev, eventDate }));
-    console.log("Final answers:", { ...answers, eventDate });
-    // add next screen here later
+    const finalAnswers = { ...answers, eventDate };
+    setAnswers(finalAnswers);
+    console.log("Final answers:", finalAnswers);
   }
+
+function handleEventDateContinue(eventDate) {
+  setAnswers((prev) => ({ ...prev, eventDate }));
+  setScreen("goalProjection");
+}
 
   if (screen === "age") {
     return <AgeScreen question={ageQuestion} onSelect={handleAgeSelect} />;
@@ -592,6 +625,7 @@ export default function TaiChiQuiz() {
   if (screen === "height") {
     return (
       <HeightScreen
+        initialData={answers.height}
         onContinue={handleHeightContinue}
         onBack={() => setScreen("lifeEventsResult")}
       />
@@ -601,7 +635,7 @@ export default function TaiChiQuiz() {
   if (screen === "weight") {
     return (
       <PerfectWeightScreen
-        // Pass height from answers to calculate BMI on the weight page
+        initialData={answers.currentWeight}
         userHeightInMeters={answers.height?.meters || 1.75}
         onContinue={handleWeightContinue}
         onBack={() => setScreen("height")}
@@ -609,12 +643,11 @@ export default function TaiChiQuiz() {
     );
   }
 
-  // NEW: Goal Weight Screen (Step 20)
   if (screen === "goalWeight") {
     return (
       <GoalWeightScreen
-        // Pass current weight so it can calculate the "Sensible Goal" %
-        currentWeightKg={answers.currentWeight?.weight || 70}
+        initialData={answers.goalWeight}
+        currentWeightKg={answers.currentWeight?.kg || 70}
         onContinue={handleGoalWeightContinue}
         onBack={() => setScreen("weight")}
       />
@@ -624,8 +657,9 @@ export default function TaiChiQuiz() {
   if (screen === "exactAge") {
     return (
       <ExactAgeScreen
+        initialAge={answers.exactAge}
         onContinue={handleExactAgeContinue}
-        onBack={() => setScreen("goalWeight")} // Corrected Back Path
+        onBack={() => setScreen("goalWeight")}
       />
     );
   }
@@ -642,7 +676,7 @@ export default function TaiChiQuiz() {
   if (screen === "wellnessProfile") {
     return (
       <WellnessProfileScreen
-        answers={answers} // This contains BMI, activityLevel, etc.
+        answers={answers}
         onContinue={handleWellnessProfileContinue}
       />
     );
@@ -667,14 +701,65 @@ export default function TaiChiQuiz() {
     );
   }
 
-  if (screen === "eventDate") {
-    return (
-      <EventDateScreen
-        onContinue={handleEventDateContinue}
-        onBack={() => setScreen("specialOccasion")}
-      />
-    );
-  }
+if (screen === "eventDate") {
+  return (
+    <EventDateScreen
+      initialDate={answers.eventDate}
+      onContinue={handleEventDateContinue}
+      onBack={() => setScreen("specialOccasion")}
+    />
+  );
+}
+
+// if (screen === "goalProjection") {
+//   return (
+//     <GoalProjectionScreen
+//       answers={answers}
+//       onContinue={() => {
+//         console.log("Final answers:", answers);
+//         // next screen here
+//       }}
+//       onBack={() => setScreen("eventDate")}
+//     />
+//   );
+// }
+
+if (screen === "goalProjection") {
+  return (
+    <GoalProjectionScreen
+      answers={answers}
+      onContinue={() => setScreen("planLoading")}
+      onBack={() => setScreen("eventDate")}
+    />
+  );
+}
+
+if (screen === "planLoading") {
+  return (
+    <PlanLoadingScreen
+      onComplete={() => setScreen("emailCapture")}
+      onBack={() => setScreen("goalProjection")}
+    />
+  );
+}
+
+if (screen === "emailCapture") {
+  return (
+    <EmailCaptureScreen
+      answers={answers}
+      onBack={() => setScreen("planLoading")}
+      onSuccess={(email) => {
+        setAnswers((prev) => ({ ...prev, email }));
+        setSentEmail(email);
+        setScreen("emailSent");
+      }}
+    />
+  );
+}
+
+if (screen === "emailSent") {
+  return <EmailSentScreen email={sentEmail} />;
+}
 
   return null;
 }

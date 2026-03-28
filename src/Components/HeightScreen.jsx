@@ -1,17 +1,27 @@
 import { useState, useRef, useEffect } from "react";
 
-export default function HeightScreen({ onContinue, onBack }) {
-  const [unit, setUnit] = useState("in");
+export default function HeightScreen({ onContinue, onBack, initialData }) {
+  const [unit, setUnit] = useState(initialData?.unit || "in");
   const [feet, setFeet] = useState("");
   const [inches, setInches] = useState("");
   const [cmValue, setCmValue] = useState("");
-  const [consent, setConsent] = useState(false);
-  const [error, setError] = useState(""); // State for range errors
+  const [consent, setConsent] = useState(initialData?.consent || false);
+  const [error, setError] = useState("");
 
   const feetRef = useRef(null);
   const inchesRef = useRef(null);
 
-  // Clear errors when switching units
+  useEffect(() => {
+    if (!initialData) return;
+
+    if (initialData.unit === "cm") {
+      setCmValue(String(initialData.value ?? ""));
+    } else if (initialData.unit === "in" && typeof initialData.value === "object") {
+      setFeet(String(initialData.value.feet ?? ""));
+      setInches(String(initialData.value.inches ?? ""));
+    }
+  }, [initialData]);
+
   function handleUnitChange(nextUnit) {
     setUnit(nextUnit);
     setFeet("");
@@ -20,29 +30,25 @@ export default function HeightScreen({ onContinue, onBack }) {
     setError("");
   }
 
-  // Range Validation Logic
   useEffect(() => {
     let errorMsg = "";
 
     if (unit === "in") {
-      const f = parseInt(feet);
-      const i = parseInt(inches);
+      const f = parseInt(feet, 10);
+      const i = parseInt(inches, 10);
 
-      // Check Feet range (4-7)
       if (feet && (f < 4 || f > 7)) {
         errorMsg = "Enter a value between 4 and 7 feet";
-      } 
-      // Check Inches range (0-11)
-      else if (inches && (i < 0 || i > 11)) {
+      } else if (inches && (i < 0 || i > 11)) {
         errorMsg = "Enter a value between 0 and 11 inches";
       }
     } else {
-      // Check CM range (120-250)
-      const cm = parseInt(cmValue);
+      const cm = parseInt(cmValue, 10);
       if (cmValue && (cm < 120 || cm > 250)) {
         errorMsg = "Please enter a value between 120 and 250 for cm";
       }
     }
+
     setError(errorMsg);
   }, [feet, inches, cmValue, unit]);
 
@@ -64,16 +70,42 @@ export default function HeightScreen({ onContinue, onBack }) {
 
   const getHeightInMeters = () => {
     if (unit === "cm") {
-      return parseFloat(cmValue) / 100;
-    } else {
-      const totalInches = (parseFloat(feet) || 0) * 12 + (parseFloat(inches) || 0);
-      return totalInches * 0.0254;
+      return Number((parseFloat(cmValue) / 100).toFixed(2));
     }
+
+    const totalInches = (parseFloat(feet) || 0) * 12 + (parseFloat(inches) || 0);
+    return Number((totalInches * 0.0254).toFixed(2));
   };
 
-  // Button logic: Must have height, NO error, and consent checked
-  const isHeightEntered = unit === "cm" ? cmValue.length >= 2 : (feet.length > 0);
+  const isHeightEntered =
+    unit === "cm" ? cmValue.length >= 3 : feet.length > 0 && inches.length > 0;
+
   const canContinue = isHeightEntered && !error && consent;
+
+  const handleContinue = () => {
+    const meters = getHeightInMeters();
+
+    if (unit === "cm") {
+      onContinue({
+        unit: "cm",
+        value: Number(cmValue),
+        meters,
+        displayValue: `${cmValue} cm`,
+        consent,
+      });
+    } else {
+      onContinue({
+        unit: "in",
+        value: {
+          feet: Number(feet),
+          inches: Number(inches),
+        },
+        meters,
+        displayValue: `${feet}'${inches}"`,
+        consent,
+      });
+    }
+  };
 
   return (
     <section className="min-h-screen bg-white px-4 pb-10 pt-4 font-sans">
@@ -160,7 +192,6 @@ export default function HeightScreen({ onContinue, onBack }) {
             )}
           </div>
 
-          {/* Error Message Display - Height fixed to prevent layout shift */}
           <div className="h-6 mt-2">
             {error && <p className="text-red-500 text-[13px] font-medium">{error}</p>}
           </div>
@@ -190,9 +221,12 @@ export default function HeightScreen({ onContinue, onBack }) {
               onChange={(e) => setConsent(e.target.checked)}
             />
             <div className="h-full w-full rounded-[6px] border-2 border-[#3ca05f] bg-white transition-all peer-checked:bg-[#3ca05f]">
-              <svg 
-                className={`h-full w-full p-1 text-white ${consent ? 'block' : 'hidden'}`} 
-                fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="4"
+              <svg
+                className={`h-full w-full p-1 text-white ${consent ? "block" : "hidden"}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth="4"
               >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
               </svg>
@@ -206,17 +240,10 @@ export default function HeightScreen({ onContinue, onBack }) {
 
         <button
           disabled={!canContinue}
-          onClick={() =>
-            onContinue({
-              unit,
-              heightInMeters: getHeightInMeters(),
-              displayValue: unit === "cm" ? `${cmValue}cm` : `${feet}'${inches}"`,
-              consent,
-            })
-          }
+          onClick={handleContinue}
           className={`mt-8 w-full rounded-[16px] py-[15px] text-[18px] font-bold text-white transition-all ${
-            canContinue 
-              ? "bg-[#3ca05f] hover:bg-[#318451] shadow-md" 
+            canContinue
+              ? "bg-[#3ca05f] hover:bg-[#318451] shadow-md"
               : "bg-[#3ca05f] opacity-50 cursor-not-allowed"
           }`}
         >

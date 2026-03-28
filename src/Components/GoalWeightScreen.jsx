@@ -1,8 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg = 70 }) {
-  const [unit, setUnit] = useState("kg");
-  const [value, setValue] = useState("");
+export default function GoalWeightScreen({
+  onContinue,
+  onBack,
+  currentWeightKg = 70,
+  initialData,
+}) {
+  const [unit, setUnit] = useState(initialData?.unit || "kg");
+  const [value, setValue] = useState(initialData?.value ? String(initialData.value) : "");
   const [goalData, setGoalData] = useState(null);
   const [error, setError] = useState("");
   const inputRef = useRef(null);
@@ -18,12 +23,15 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
 
   useEffect(() => {
     const targetWeight = parseFloat(value);
-    
+
     if (value.length > 0) {
       if (targetWeight < limits.min || targetWeight > limits.max) {
         const minDigits = unit === "kg" ? 2 : 3;
         if (value.length >= minDigits) {
           setError(`Please enter a value between ${limits.min} and ${limits.max} ${unit}`);
+          setGoalData(null);
+        } else {
+          setError("");
           setGoalData(null);
         }
       } else {
@@ -46,7 +54,7 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
       setGoalData({
         icon: "👊",
         title: `SENSIBLE GOAL: lose ${percentage}% of your weight`,
-        desc: `Secure your health and longevity by managing your weight correctly. According to CDC recommendations, losing 4 kg per month is perfectly safe.`
+        desc: "Secure your health and longevity by managing your weight correctly. According to CDC recommendations, losing 4 kg per month is perfectly safe.",
       });
     } else if (targetKg > currentKg) {
       const diffKg = targetKg - currentKg;
@@ -54,13 +62,13 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
       setGoalData({
         icon: "💪",
         title: `GOAL: gain ${percentage}% of your weight`,
-        desc: "Building muscle mass and maintaining a surplus will help you reach your ideal physique safely."
+        desc: "Building muscle mass and maintaining a surplus will help you reach your ideal physique safely.",
       });
     } else {
       setGoalData({
         icon: "✨",
         title: "MAINTAIN: Keep your current weight",
-        desc: "You're already at your perfect weight! We'll focus on toning and health maintenance."
+        desc: "You're already at your perfect weight! We'll focus on toning and health maintenance.",
       });
     }
   };
@@ -82,9 +90,21 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
 
   const isValid = parseFloat(value) >= limits.min && parseFloat(value) <= limits.max;
 
+  const handleContinue = () => {
+    if (!isValid) return;
+
+    const numericValue = Number(value);
+    const kg = unit === "lbs" ? Number((numericValue * 0.453592).toFixed(2)) : numericValue;
+
+    onContinue({
+      value: numericValue,
+      unit,
+      kg,
+    });
+  };
+
   return (
     <section className="min-h-screen bg-white px-4 pb-10 pt-4 font-sans text-center">
-      {/* Header & Progress Bar */}
       <div className="mx-auto max-w-full">
         <div className="flex items-center justify-between">
           <button onClick={onBack} className="text-[24px] text-[#b8b8b8]">←</button>
@@ -100,7 +120,6 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
           What would you consider to be your perfect <br /> weight?
         </h2>
 
-        {/* Toggle */}
         <div className="mt-6 flex justify-center">
           <div className="flex rounded-full bg-[#ecebe7] p-[3px]">
             {["lbs", "kg"].map((u) => (
@@ -117,7 +136,6 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
           </div>
         </div>
 
-        {/* Big Number Input with Unit at Right-Bottom */}
         <div className="mt-12 flex items-baseline justify-center">
           <input
             ref={inputRef}
@@ -136,12 +154,10 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
           </span>
         </div>
 
-        {/* Error Space */}
         <div className="h-6 mt-2 flex items-center justify-center">
           {error && <p className="text-red-500 text-[13px] font-medium">{error}</p>}
         </div>
 
-        {/* Goal Box */}
         {goalData && (
           <div className="mt-4 w-full rounded-[24px] bg-[#f2f2ee] p-6 text-left animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div className="flex items-start gap-4">
@@ -160,10 +176,10 @@ export default function GoalWeightScreen({ onContinue, onBack, currentWeightKg =
 
         <button
           disabled={!isValid}
-          onClick={() => onContinue({ goalWeight: value, unit })}
+          onClick={handleContinue}
           className={`mt-10 w-full rounded-[16px] py-[12px] text-[18px] font-bold text-white transition-all ${
-            isValid 
-              ? "bg-[#3ca05f] hover:bg-[#318451] shadow-md" 
+            isValid
+              ? "bg-[#3ca05f] hover:bg-[#318451] shadow-md"
               : "bg-[#3ca05f] opacity-50 cursor-not-allowed"
           }`}
         >

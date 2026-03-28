@@ -1,32 +1,88 @@
 import React, { useEffect, useState } from "react";
 
 export default function WellnessProfileScreen({ answers, onContinue }) {
-  // 1. Local state for the animated position
   const [animatedPos, setAnimatedPos] = useState(0);
 
-  // 2. BMI Calculation Logic
-  const bmi = parseFloat(answers.bmi) || 22.0;
-  
-  // Maps BMI (range 15-40) to a 0-100% scale for the UI bar
+  const bmi = Number(answers?.currentWeight?.bmi) || 22.0;
+  const lifestyle = answers?.activityLevel || "Active";
+  const currentWeightKg = Number(answers?.currentWeight?.kg || 0);
+  const goalWeightKg = Number(answers?.goalWeight?.kg || 0);
+  const exactAge = answers?.exactAge || "-";
+
   const getBmiPosition = (val) => {
     if (val <= 15) return 0;
     if (val >= 40) return 100;
     return ((val - 15) / (40 - 15)) * 100;
   };
 
-  // 3. Trigger the "Slide" effect on mount
   useEffect(() => {
     const finalPos = getBmiPosition(bmi);
-    // Small timeout ensures the DOM is painted so the transition is visible
     const timer = setTimeout(() => {
       setAnimatedPos(finalPos);
     }, 100);
+
     return () => clearTimeout(timer);
   }, [bmi]);
 
-  // 4. Dynamic Content based on BMI
-  const isNormal = bmi >= 18.5 && bmi <= 25;
-  const lifestyle = answers.activityLevel || "Active";
+  const getBmiCategory = (value) => {
+    if (value < 18.5) return "Low";
+    if (value < 25) return "Normal";
+    if (value < 30) return "Overweight";
+    return "Obese";
+  };
+
+  const getFeedbackContent = (value) => {
+    if (value < 25) {
+      return {
+        icon: "👉",
+        title: "You are in a healthy range",
+        description:
+          "You are doing well. We will build your plan to help you stay consistent and feel even better in your body.",
+        boxBg: "bg-[#eef7ee]",
+        boxBorder: "border-[#dceadc]",
+        textColor: "text-[#4a5f4a]",
+      };
+    }
+
+    if (value < 30) {
+      return {
+        icon: "👉",
+        title: "You can improve your current level",
+        description:
+          "Many people are in this situation, and it can be improved step by step. We will create a simple plan to help you feel lighter and move more easily.",
+        boxBg: "bg-[#fff7e8]",
+        boxBorder: "border-[#f3dfb2]",
+        textColor: "text-[#7a5a1f]",
+      };
+    }
+
+    return {
+      icon: "👉",
+      title: "It’s a good time to take care of your body",
+      description:
+        "Your current weight may make daily movement harder. The good news is — with the right plan, you can improve this over time. We will guide you in a safe and simple way.",
+      boxBg: "bg-[#fff1f1]",
+      boxBorder: "border-[#f1caca]",
+      textColor: "text-[#7a4040]",
+    };
+  };
+
+  const bmiLabel = getBmiCategory(bmi);
+  const feedback = getFeedbackContent(bmi);
+
+  const weightDifference =
+    currentWeightKg && goalWeightKg
+      ? Math.abs(currentWeightKg - goalWeightKg).toFixed(1)
+      : null;
+
+  const weightGoalText =
+    currentWeightKg && goalWeightKg
+      ? goalWeightKg < currentWeightKg
+        ? `Lose ${weightDifference} kg`
+        : goalWeightKg > currentWeightKg
+        ? `Gain ${weightDifference} kg`
+        : "Maintain weight"
+      : "Weight goal set";
 
   return (
     <section className="min-h-screen bg-[#f9f9f7] px-4 py-10 font-sans">
@@ -35,37 +91,33 @@ export default function WellnessProfileScreen({ answers, onContinue }) {
           Here is your wellness profile
         </h2>
 
-        {/* BMI CARD */}
         <div className="rounded-[24px] bg-white p-6 shadow-sm border border-[#efefed]">
           <div className="flex justify-between items-center mb-6">
-            <span className="font-bold text-[15px] text-black">Body-Mass-Index (BMI)</span>
+            <span className="font-bold text-[15px] text-black">
+              Body-Mass-Index (BMI)
+            </span>
             <span className="text-[13px] text-[#6f6f6f]">
-              {isNormal ? "Normal" : bmi > 25 ? "High" : "Low"} - {bmi}
+              {bmiLabel} - {bmi}
             </span>
           </div>
 
           <div className="relative mt-12 mb-8">
-            {/* The Gradient Bar */}
             <div className="h-2.5 w-full rounded-full flex overflow-hidden bg-[#eee]">
-              <div className="h-full w-[35%] bg-[#4CAF50]" /> {/* Normal */}
-              <div className="h-full w-[25%] bg-[#FFC107]" /> {/* Overweight */}
-              <div className="h-full w-[40%] bg-[#F44336]" /> {/* Obese */}
+              <div className="h-full w-[35%] bg-[#4CAF50]" />
+              <div className="h-full w-[25%] bg-[#FFC107]" />
+              <div className="h-full w-[40%] bg-[#F44336]" />
             </div>
 
-            {/* THE SLIDING INDICATOR */}
-            <div 
+            <div
               className="absolute top-[-42px] flex flex-col items-center transition-all duration-[1500ms] ease-out"
-              style={{ left: `${animatedPos}%`, transform: 'translateX(-50%)' }}
+              style={{ left: `${animatedPos}%`, transform: "translateX(-50%)" }}
             >
-              {/* BMI Label Tooltip */}
               <div className="relative bg-[#333] text-white text-[12px] px-3 py-1.5 rounded-lg font-bold mb-2 whitespace-nowrap shadow-md">
                 Your BMI is {bmi}
-                {/* Tooltip Arrow */}
                 <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#333] rotate-45" />
               </div>
-              
-              {/* The Yellow Dot */}
-              <div className="w-5 h-5 rounded-full border-[3px] border-white bg-[#FFC107] shadow-lg" />
+
+              <div className="w-3.5 h-3.5 rounded-full bg-[#ffd54f] border-[2px] border-white shadow-[0_4px_12px_rgba(0,0,0,0.22)]" />
             </div>
 
             <div className="flex justify-between mt-4 text-[10px] font-extrabold text-[#b0b0ae] uppercase tracking-widest">
@@ -76,24 +128,22 @@ export default function WellnessProfileScreen({ answers, onContinue }) {
           </div>
         </div>
 
-        {/* PROFILE ATTRIBUTES */}
         <div className="mt-8 space-y-7 px-2">
           <AttributeItem icon="🕒" label="Lifestyle" value={lifestyle} />
-          <AttributeItem icon="🍴" label="Type of Eater" value="Gourmand" />
-          <AttributeItem icon="🔥" label="Fitness Motivation" value="High" />
+          <AttributeItem icon="🎯" label="Weight Goal" value={weightGoalText} />
+          <AttributeItem icon="📅" label="Age" value={`${exactAge} years`} />
         </div>
 
-        {/* FEEDBACK BOX */}
-        <div className="mt-10 rounded-[24px] bg-[#eef7ee] p-6 flex items-start gap-4 border border-[#dceadc]">
-          <span className="text-[26px]">👌</span>
+        <div
+          className={`mt-10 rounded-[24px] p-6 flex items-start gap-4 border ${feedback.boxBg} ${feedback.boxBorder}`}
+        >
+          <span className="text-[24px]">{feedback.icon}</span>
           <div>
-            <h4 className="font-bold text-[16px] text-black mb-1">
-              {isNormal ? "Good starting BMI to get a fit body" : "Tailored plan for your body type"}
+            <h4 className="font-bold text-[16px] text-black mb-2">
+              {feedback.title}
             </h4>
-            <p className="text-[14px] leading-relaxed text-[#4a5f4a]">
-              {isNormal 
-                ? "You are doing a good job keeping your weight in the normal range. We will use your index to tailor a program to your needs."
-                : "We've analyzed your BMI and will adjust your caloric intake and exercise intensity to reach your goals safely."}
+            <p className={`text-[14px] leading-relaxed ${feedback.textColor}`}>
+              {feedback.description}
             </p>
           </div>
         </div>
@@ -109,7 +159,6 @@ export default function WellnessProfileScreen({ answers, onContinue }) {
   );
 }
 
-// Helper component for the list items
 function AttributeItem({ icon, label, value }) {
   return (
     <div className="flex items-center gap-5">
@@ -117,7 +166,9 @@ function AttributeItem({ icon, label, value }) {
         {icon}
       </div>
       <div>
-        <p className="text-[10px] font-bold text-[#b0b0ae] uppercase tracking-tighter">{label}</p>
+        <p className="text-[10px] font-bold text-[#b0b0ae] uppercase tracking-tighter">
+          {label}
+        </p>
         <p className="text-[17px] font-bold text-black">{value}</p>
       </div>
     </div>

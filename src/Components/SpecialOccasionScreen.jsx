@@ -25,13 +25,12 @@ export default function SpecialOccasionScreen({
       </div>
 
       <div className="mx-auto mt-10 flex w-full max-w-[560px] flex-col items-center">
-        <h2 className="max-w-[520px] text-center text-[28px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black">
-          Is there a special occasion you want to lose
-          <br />
-          weight for?
+        <h2 className="max-w-[520px] text-center text-[24px] font-bold leading-[1.15] tracking-[-0.02em] text-black">
+         Do you have any upcoming event that motivates you to lose weight?
         </h2>
 
         <div className="mt-8 flex w-full flex-col gap-4">
+          <h4 className="font-bold">You can choose more than one</h4>
           {options.map((option) => (
             <button
               key={option.id}

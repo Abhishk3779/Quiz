@@ -1,9 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMeters = 1.75 }) {
-  const [unit, setUnit] = useState("kg");
-  const [value, setValue] = useState("");
-  const [bmiResult, setBmiResult] = useState(null);
+export default function PerfectWeightScreen({
+  onContinue,
+  onBack,
+  userHeightInMeters = 1.75,
+  initialData,
+}) {
+  const [unit, setUnit] = useState(initialData?.unit || "kg");
+  const [value, setValue] = useState(initialData?.value ? String(initialData.value) : "");
+  const [bmiResult, setBmiResult] = useState(initialData?.bmi || null);
   const [error, setError] = useState("");
   const inputRef = useRef(null);
 
@@ -18,11 +23,9 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
 
   useEffect(() => {
     const weight = parseFloat(value);
-    
+
     if (value.length > 0) {
-      // 1. Check if weight is within the required range
       if (weight < limits.min || weight > limits.max) {
-        // Show error only if they've typed enough digits to realistically be finished
         const minDigits = unit === "kg" ? 2 : 3;
         if (value.length >= minDigits) {
           setError(`Please enter a value between ${limits.min} and ${limits.max} for ${unit}`);
@@ -32,10 +35,8 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
           setBmiResult(null);
         }
       } else {
-        // 2. Weight is valid -> Clear error and Calculate BMI
         setError("");
         const weightInKg = unit === "lbs" ? weight * 0.453592 : weight;
-        // Basic BMI formula: weight (kg) / height (m)^2
         const bmi = weightInKg / (userHeightInMeters * userHeightInMeters);
         setBmiResult(parseFloat(bmi.toFixed(1)));
       }
@@ -56,32 +57,31 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
   const handleChange = (e) => {
     const raw = e.target.value;
     let cleaned = raw.replace(/\D/g, "");
-    // Strictly allow only 3 digits
     if (cleaned.length > 3) cleaned = cleaned.slice(0, 3);
     setValue(cleaned);
   };
 
   const getBmiStatus = (bmi) => {
     if (bmi < 25) {
-      return { 
-        label: "Normal", 
-        bgColor: "bg-[#FEF9C3]", // Light Yellow
-        icon: "👏", 
-        desc: "You are doing a good job keeping your weight in the normal range. We will use your index to tailor a program to your needs." 
+      return {
+        label: "Normal",
+        bgColor: "bg-[#FEF9C3]",
+        icon: "👏",
+        desc: "You are doing a good job keeping your weight in the normal range. We will use your index to tailor a program to your needs.",
       };
     } else if (bmi >= 25 && bmi < 30) {
-      return { 
-        label: "Slightly High", 
-        bgColor: "bg-[#FFEDD5]", // Orange
-        icon: "☝️", 
-        desc: "Your weight is slightly above the ideal range. We will use this index to customize your plan." 
+      return {
+        label: "Slightly High",
+        bgColor: "bg-[#FFEDD5]",
+        icon: "☝️",
+        desc: "Your weight is slightly above the ideal range. We will use this index to customize your plan.",
       };
     } else {
-      return { 
-        label: "High", 
-        bgColor: "bg-[#FEE2E2]", // Red
-        icon: "⚠️", 
-        desc: "Your BMI is in the high range. Let's work on a plan to reach your goals safely." 
+      return {
+        label: "High",
+        bgColor: "bg-[#FEE2E2]",
+        icon: "⚠️",
+        desc: "Your BMI is in the high range. Let's work on a plan to reach your goals safely.",
       };
     }
   };
@@ -89,9 +89,22 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
   const isValid = parseFloat(value) >= limits.min && parseFloat(value) <= limits.max;
   const status = bmiResult ? getBmiStatus(bmiResult) : null;
 
+  const handleContinue = () => {
+    if (!isValid || bmiResult === null) return;
+
+    const numericValue = Number(value);
+    const kg = unit === "lbs" ? Number((numericValue * 0.453592).toFixed(2)) : numericValue;
+
+    onContinue({
+      value: numericValue,
+      unit,
+      kg,
+      bmi: bmiResult,
+    });
+  };
+
   return (
     <section className="min-h-screen bg-white px-4 pb-10 pt-4 font-sans">
-      {/* Header & Progress Bar */}
       <div className="mx-auto max-w-full">
         <div className="flex items-center justify-between">
           <button onClick={onBack} className="text-[24px] text-[#b8b8b8]">←</button>
@@ -107,7 +120,6 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
           What&apos;s your current weight?
         </h2>
 
-        {/* Unit Toggle (Height Page Style) */}
         <div className="mt-6 flex justify-center">
           <div className="flex rounded-full bg-[#ecebe7] p-[3px]">
             {["lbs", "kg"].map((u) => (
@@ -124,7 +136,6 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
           </div>
         </div>
 
-        {/* Weight Input Area */}
         <div className="mt-12 relative flex items-center justify-center">
           <div className="relative flex items-center">
             <input
@@ -139,19 +150,16 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
               }`}
               style={{ width: value.length > 0 ? `${value.length * 45 + 10}px` : "80px" }}
             />
-            {/* Unit at Bottom Right */}
             <span className="absolute bottom-2 -right-8 text-[18px] font-bold text-black">
               {unit}
             </span>
           </div>
         </div>
 
-        {/* Error Message Space (No jump) */}
         <div className="h-6 mt-2 flex items-center justify-center">
           {error && <p className="text-red-500 text-[13px] font-medium">{error}</p>}
         </div>
 
-        {/* Dynamic Color-Coded Result Box */}
         {bmiResult && status && (
           <div className={`mt-4 w-full rounded-[24px] ${status.bgColor} p-6 animate-in fade-in slide-in-from-top-2 duration-300`}>
             <div className="flex items-start gap-4">
@@ -170,10 +178,10 @@ export default function PerfectWeightScreen({ onContinue, onBack, userHeightInMe
 
         <button
           disabled={!isValid}
-          onClick={() => onContinue({ weight: value, unit, bmi: bmiResult })}
+          onClick={handleContinue}
           className={`mt-10 w-full rounded-[16px] py-[12px] text-[18px] font-bold text-white transition-all ${
-            isValid 
-              ? "bg-[#3ca05f] hover:bg-[#318451] shadow-md" 
+            isValid
+              ? "bg-[#3ca05f] hover:bg-[#318451] shadow-md"
               : "bg-[#3ca05f] opacity-50 cursor-not-allowed"
           }`}
         >

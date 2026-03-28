@@ -239,37 +239,37 @@ export const lifeEventsOptions = [
 export const specialOccasionOptions = [
   {
     id: "vacation",
-    label: "Vacation",
+    label: "Holiday or trip",
     emoji: "🙂",
   },
   {
     id: "sporting-event",
-    label: "Sporting event",
+    label: "Sports activity",
     emoji: "🥇",
   },
   {
     id: "beach-trip",
-    label: "Beach trip",
+    label: "Trip to the beach",
     emoji: "👙",
   },
   {
     id: "wedding",
-    label: "Wedding",
+    label: "wedding",
     emoji: "🍾",
   },
   {
     id: "family-occasion",
-    label: "Family occasion",
+    label: "Family event",
     emoji: "👨‍👩‍👧",
   },
   {
     id: "reunion",
-    label: "Reunion",
+    label: "Meeting people (reunion)",
     emoji: "👊",
   },
   {
     id: "no-similar-events",
-    label: "No similar events",
+    label: "No special plans",
     emoji: "✖",
   },
 ];
