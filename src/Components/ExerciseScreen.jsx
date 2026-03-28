@@ -2,7 +2,7 @@ function ExerciseOptionCard({ option, onSelect }) {
   return (
     <button
       onClick={() => onSelect(option.label)}
-      className={`flex min-h-[80px] w-full items-center justify-between rounded-[14px] px-6 transition ${
+      className={`flex min-h-[80px] w-[600px] mx-auto items-center justify-between rounded-[14px] px-6 transition ${
         option.selected ? "bg-[#3b9b5d]" : "bg-[#ecebe7]"
       }`}
     >
@@ -15,9 +15,9 @@ function ExerciseOptionCard({ option, onSelect }) {
       </span>
 
       <img
-        src=""
+        src={option.image}
         alt="exercise"
-        className="h-[70px] w-[70px] object-contain"
+        className="h-[80px] w-[80px] object-contain"
       />
     </button>
   );
@@ -41,8 +41,8 @@ export default function ExerciseScreen({ options, onSelect, onBack }) {
       </div>
 
       {/* Content */}
-      <div className="mx-auto mt-10 max-w-[760px]">
-        <h2 className="text-center text-[30px] font-extrabold md:text-[36px]">
+      <div className="mx-auto mt-10 max-w-650px]">
+        <h2 className="text-center text-[30px] font-bold md:text-[24px]">
           How often do you exercise?
         </h2>
 

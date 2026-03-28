@@ -8,6 +8,13 @@ import img7 from '../assets/heavy.png';
 import img8 from '../assets/lighter.png';
 import img9 from '../assets/toned.png';
 import img10 from '../assets/balanced.png';
+import img11 from '../assets/Exercise1.png';
+import img12 from '../assets/Exercise2.png';
+import img13 from '../assets/Exercise3.png';
+import img14 from '../assets/back-pain.png';
+import img15 from '../assets/knee-pain.png';
+import img16 from '../assets/elbow-pain.png';
+import img17 from '../assets/no-problem.png';
 
 
 export const ageQuestion = {
@@ -65,44 +72,44 @@ export const flexibilityOptions = [
 ];
 
 export const exerciseOptions = [
-  { id: 1, label: "Almost every day", selected: false },
-  { id: 2, label: "Several times per week", selected: false },
-  { id: 3, label: "Several times per month", selected: false },
+  { id: 1, label: "Almost every day", selected: false ,image : img11 },
+  { id: 2, label: "A few times per week", selected: false ,image : img12},
+  { id: 3, label: "A few times per month", selected: false ,image : img13 },
 ];
 
 export const stairsFeelingOptions = [
-  { id: 1, label: "I feel short of breath", emoji: "🤷‍♀️", selected: false },
+  { id: 1, label: "I feel out of breath", emoji: "🤷‍♀️", selected: false },
   {
     id: 2,
-    label: "I feel slightly winded, but I’m okay",
+    label: "I feel a bit tired, but okay",
     emoji: "🥲",
-    selected: true,
+    selected: false,
   },
   {
     id: 3,
-    label: "I feel fine after one flight of stairs",
+    label: "I feel fine after one flight",
     emoji: "👌",
     selected: false,
   },
   {
     id: 4,
-    label: "I can easily climb 3-5 flights of stairs",
+    label: "I can easily climb several flights",
     emoji: "💪",
     selected: false,
   },
 ];
 
 export const walkFrequencyOptions = [
-  { id: 1, label: "Almost every day", emoji: "💪", selected: false },
-  { id: 2, label: "2-3 times per week", emoji: "👍", selected: false },
-  { id: 3, label: "More like once a month", emoji: "👌", selected: false },
+  { id: 1, label: "Nearly every day", emoji: "💪", selected: false },
+  { id: 2, label: "A few times during the week", emoji: "👍", selected: false },
+  { id: 3, label: "Rarely (around once a month)", emoji: "👌", selected: false },
 ];
 
 export const strugglesOptions = [
-  { id: 1, label: "Sensitive back", selected: false },
-  { id: 2, label: "Sensitive knees", selected: false },
-  { id: 3, label: "Sensitive elbows", selected: false },
-  { id: 4, label: "None of the above", selected: false },
+  { id: 1, label: "Back pain", selected: false , image : img14 },
+  { id: 2, label: "Knee pain", selected: false , image : img15 },
+  { id: 3, label: "Elbow pain", selected: false , image : img16 },
+  { id: 4, label: "No problems", selected: false , image : img17 },
 ];
 
 export const workloadOptions = [

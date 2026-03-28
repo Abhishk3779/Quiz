@@ -59,8 +59,8 @@ export default function StrugglesScreen({
       </div>
 
       <div className="mx-auto mt-10 max-w-[520px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black md:text-[38px]">
-          Do you struggle with any of the following?
+        <h2 className="text-center text-[30px] font-bold leading-[1.15] tracking-[-0.02em] text-black md:text-[24px]">
+         Do you have any pain or discomfort in your body?
         </h2>
 
         <div className="mt-8 space-y-4">
@@ -77,7 +77,7 @@ export default function StrugglesScreen({
           type="button"
           onClick={onContinue}
           disabled={!hasSelection}
-          className={`mt-20 w-full rounded-[16px] py-5 text-[22px] font-bold transition ${
+          className={`mt-20 w-full rounded-[16px] py-2 text-[22px] font-bold transition ${
             hasSelection
               ? "bg-[#67b382] text-white"
               : "bg-[#67b382] text-[#b9ddc5] opacity-90"
