@@ -24,6 +24,7 @@ import LifeEventsScreen from "./LifeEventsScreen";
 import LifeEventsResultScreen from "./LifeEventsResultScreen";
 import HeightScreen from "./HeightScreen";
 import PerfectWeightScreen from "./PerfectWeightScreen";
+import GoalWeightScreen from "./GoalWeightScreen"; // Imported New Component
 import ExactAgeScreen from "./ExactAgeScreen";
 import NameScreen from "./NameScreen";
 import WellnessProfileScreen from "./WellnessProfileScreen";
@@ -351,7 +352,14 @@ export default function TaiChiQuiz() {
   }
 
   function handleWeightContinue(weightData) {
-    setAnswers((prev) => ({ ...prev, weight: weightData }));
+    // Save current weight (value and unit)
+    setAnswers((prev) => ({ ...prev, currentWeight: weightData }));
+    setScreen("goalWeight");
+  }
+
+  function handleGoalWeightContinue(goalData) {
+    // Save the perfect/goal weight data
+    setAnswers((prev) => ({ ...prev, goalWeight: goalData }));
     setScreen("exactAge");
   }
 
@@ -359,7 +367,6 @@ export default function TaiChiQuiz() {
     setAnswers((prev) => ({ ...prev, exactAge: ageValue }));
     setScreen("name");
   }
-
   function handleNameContinue(nameValue) {
     setAnswers((prev) => ({ ...prev, name: nameValue }));
     setScreen("wellnessProfile");
@@ -594,8 +601,22 @@ export default function TaiChiQuiz() {
   if (screen === "weight") {
     return (
       <PerfectWeightScreen
+        // Pass height from answers to calculate BMI on the weight page
+        userHeightInMeters={answers.height?.meters || 1.75}
         onContinue={handleWeightContinue}
         onBack={() => setScreen("height")}
+      />
+    );
+  }
+
+  // NEW: Goal Weight Screen (Step 20)
+  if (screen === "goalWeight") {
+    return (
+      <GoalWeightScreen
+        // Pass current weight so it can calculate the "Sensible Goal" %
+        currentWeightKg={answers.currentWeight?.weight || 70}
+        onContinue={handleGoalWeightContinue}
+        onBack={() => setScreen("weight")}
       />
     );
   }
@@ -604,7 +625,7 @@ export default function TaiChiQuiz() {
     return (
       <ExactAgeScreen
         onContinue={handleExactAgeContinue}
-        onBack={() => setScreen("weight")}
+        onBack={() => setScreen("goalWeight")} // Corrected Back Path
       />
     );
   }
@@ -621,9 +642,8 @@ export default function TaiChiQuiz() {
   if (screen === "wellnessProfile") {
     return (
       <WellnessProfileScreen
-        answers={answers}
+        answers={answers} // This contains BMI, activityLevel, etc.
         onContinue={handleWellnessProfileContinue}
-        onBack={() => setScreen("name")}
       />
     );
   }

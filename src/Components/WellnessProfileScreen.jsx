@@ -1,64 +1,74 @@
-export default function WellnessProfileScreen({
-  onContinue,
-  onBack,
-  answers = {},
-}) {
-  const heightData = answers.height || {};
-  const weightData = answers.weight || {};
+import React, { useEffect, useState } from "react";
 
-  const heightCm = getHeightInCm(heightData);
-  const weightKg = getWeightInKg(weightData);
+export default function WellnessProfileScreen({ answers, onContinue }) {
+  // 1. Local state for the animated position
+  const [animatedPos, setAnimatedPos] = useState(0);
 
-  const bmi =
-    heightCm > 0 && weightKg > 0
-      ? Number((weightKg / Math.pow(heightCm / 100, 2)).toFixed(1))
-      : 21.6;
+  // 2. BMI Calculation Logic
+  const bmi = parseFloat(answers.bmi) || 22.0;
+  
+  // Maps BMI (range 15-40) to a 0-100% scale for the UI bar
+  const getBmiPosition = (val) => {
+    if (val <= 15) return 0;
+    if (val >= 40) return 100;
+    return ((val - 15) / (40 - 15)) * 100;
+  };
 
-  const markerPosition = getBmiPosition(bmi);
-  const bmiLabel = getBmiLabel(bmi);
+  // 3. Trigger the "Slide" effect on mount
+  useEffect(() => {
+    const finalPos = getBmiPosition(bmi);
+    // Small timeout ensures the DOM is painted so the transition is visible
+    const timer = setTimeout(() => {
+      setAnimatedPos(finalPos);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [bmi]);
+
+  // 4. Dynamic Content based on BMI
+  const isNormal = bmi >= 18.5 && bmi <= 25;
+  const lifestyle = answers.activityLevel || "Active";
 
   return (
-    <div className="min-h-screen bg-[#f6f6f4] px-2 pt-6 pb-10 font-sans">
-      <div className="mx-auto flex w-full max-w-[520px] flex-col items-center">
-        <h2 className="text-center text-[28px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black">
+    <section className="min-h-screen bg-[#f9f9f7] px-4 py-10 font-sans">
+      <div className="mx-auto max-w-[600px]">
+        <h2 className="mb-8 text-center text-[28px] font-bold text-black">
           Here is your wellness profile
         </h2>
 
-        <div className="mt-10 w-full rounded-[18px] bg-white px-4 py-5 shadow-[0_2px_12px_rgba(0,0,0,0.05)]">
-          <div className="flex items-start justify-between gap-4">
-            <h3 className="text-[15px] font-bold text-[#171717]">
-              Body-Mass-Index (BMI)
-            </h3>
-
-            <p className="text-[13px] font-medium text-[#6d573c]">
-              {bmiLabel} - {bmi.toFixed(1)}
-            </p>
+        {/* BMI CARD */}
+        <div className="rounded-[24px] bg-white p-6 shadow-sm border border-[#efefed]">
+          <div className="flex justify-between items-center mb-6">
+            <span className="font-bold text-[15px] text-black">Body-Mass-Index (BMI)</span>
+            <span className="text-[13px] text-[#6f6f6f]">
+              {isNormal ? "Normal" : bmi > 25 ? "High" : "Low"} - {bmi}
+            </span>
           </div>
 
-          <div className="relative mt-8">
-            <div className="absolute -top-8 z-10" style={{ left: `${markerPosition}%`, transform: "translateX(-50%)" }}>
-              <div className="relative rounded-[8px] bg-[#5d5d5d] px-3 py-1.5 text-center text-[11px] font-semibold leading-[1.05] text-white shadow">
-                Your BMI is
-                <br />
-                {bmi.toFixed(1)}
-                <div className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-l-[6px] border-r-[6px] border-t-[7px] border-l-transparent border-r-transparent border-t-[#5d5d5d]" />
-              </div>
+          <div className="relative mt-12 mb-8">
+            {/* The Gradient Bar */}
+            <div className="h-2.5 w-full rounded-full flex overflow-hidden bg-[#eee]">
+              <div className="h-full w-[35%] bg-[#4CAF50]" /> {/* Normal */}
+              <div className="h-full w-[25%] bg-[#FFC107]" /> {/* Overweight */}
+              <div className="h-full w-[40%] bg-[#F44336]" /> {/* Obese */}
             </div>
 
-            <div className="h-[8px] w-full overflow-hidden rounded-full bg-[#ececec]">
-              <div className="flex h-full w-full">
-                <div className="h-full w-[34%] bg-[#56c66b]" />
-                <div className="h-full w-[33%] bg-[#e9b16d]" />
-                <div className="h-full w-[33%] bg-[#ee9a9a]" />
+            {/* THE SLIDING INDICATOR */}
+            <div 
+              className="absolute top-[-42px] flex flex-col items-center transition-all duration-[1500ms] ease-out"
+              style={{ left: `${animatedPos}%`, transform: 'translateX(-50%)' }}
+            >
+              {/* BMI Label Tooltip */}
+              <div className="relative bg-[#333] text-white text-[12px] px-3 py-1.5 rounded-lg font-bold mb-2 whitespace-nowrap shadow-md">
+                Your BMI is {bmi}
+                {/* Tooltip Arrow */}
+                <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-[#333] rotate-45" />
               </div>
+              
+              {/* The Yellow Dot */}
+              <div className="w-5 h-5 rounded-full border-[3px] border-white bg-[#FFC107] shadow-lg" />
             </div>
 
-            <div
-              className="absolute top-1/2 z-20 h-[20px] w-[20px] -translate-y-1/2 rounded-full border-[3px] border-[#e4c44d] bg-white shadow-sm"
-              style={{ left: `${markerPosition}%`, transform: "translate(-50%, -50%)" }}
-            />
-
-            <div className="mt-4 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.08em] text-[#5e5e5e]">
+            <div className="flex justify-between mt-4 text-[10px] font-extrabold text-[#b0b0ae] uppercase tracking-widest">
               <span>Normal</span>
               <span>Overweight</span>
               <span>Obese</span>
@@ -66,117 +76,50 @@ export default function WellnessProfileScreen({
           </div>
         </div>
 
-        <div className="mt-5 grid w-full grid-cols-[1fr_160px] items-end gap-3">
-          <div className="space-y-7 px-6 py-3">
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-[18px] text-[#7a7a7a]">◔</span>
-              <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[#8a8a8a]">
-                  Lifestyle
-                </p>
-                <p className="mt-1 text-[16px] font-bold text-black">Active</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-[18px] text-[#7a7a7a]">🍴</span>
-              <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[#8a8a8a]">
-                  Type of eater
-                </p>
-                <p className="mt-1 text-[16px] font-bold text-black">Gourmand</p>
-              </div>
-            </div>
-
-            <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-[18px] text-[#7a7a7a]">🔥</span>
-              <div>
-                <p className="text-[11px] font-medium uppercase tracking-[0.08em] text-[#8a8a8a]">
-                  Fitness motivation
-                </p>
-                <p className="mt-1 text-[16px] font-bold text-black">High</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex items-end justify-center">
-            <img
-              src=""
-              alt=""
-              className="h-[250px] w-auto object-contain"
-            />
-          </div>
+        {/* PROFILE ATTRIBUTES */}
+        <div className="mt-8 space-y-7 px-2">
+          <AttributeItem icon="🕒" label="Lifestyle" value={lifestyle} />
+          <AttributeItem icon="🍴" label="Type of Eater" value="Gourmand" />
+          <AttributeItem icon="🔥" label="Fitness Motivation" value="High" />
         </div>
 
-        <div className="mt-4 w-full rounded-[18px] bg-[#dbe7c7] px-8 py-6">
-          <div className="flex items-start gap-3">
-            <span className="text-[28px] leading-none">👌</span>
-            <div>
-              <p className="text-[16px] font-bold leading-tight text-[#1d1d1d]">
-                Good starting BMI to get a fit body
-              </p>
-              <p className="mt-2 text-[14px] leading-[1.45] text-[#48513f]">
-                You are doing a good job keeping your weight in the normal
-                range. We will use your index to tailor a program to your
-                needs.
-              </p>
-            </div>
+        {/* FEEDBACK BOX */}
+        <div className="mt-10 rounded-[24px] bg-[#eef7ee] p-6 flex items-start gap-4 border border-[#dceadc]">
+          <span className="text-[26px]">👌</span>
+          <div>
+            <h4 className="font-bold text-[16px] text-black mb-1">
+              {isNormal ? "Good starting BMI to get a fit body" : "Tailored plan for your body type"}
+            </h4>
+            <p className="text-[14px] leading-relaxed text-[#4a5f4a]">
+              {isNormal 
+                ? "You are doing a good job keeping your weight in the normal range. We will use your index to tailor a program to your needs."
+                : "We've analyzed your BMI and will adjust your caloric intake and exercise intensity to reach your goals safely."}
+            </p>
           </div>
         </div>
 
         <button
-          type="button"
           onClick={onContinue}
-          className="mt-10 h-[52px] w-full rounded-[14px] bg-[#36975f] text-[18px] font-semibold text-white transition hover:bg-[#318653]"
+          className="mt-8 w-full rounded-[18px] bg-[#3ca05f] py-[18px] text-[18px] font-bold text-white shadow-xl active:scale-[0.98] transition-all"
         >
           Continue
         </button>
       </div>
-    </div>
+    </section>
   );
 }
 
-function getHeightInCm(heightData) {
-  if (!heightData || typeof heightData !== "object") return 0;
-
-  if (heightData.unit === "cm") {
-    return Number(heightData.value) || 0;
-  }
-
-  if (heightData.unit === "ft-in") {
-    const feet = Number(heightData.feet) || 0;
-    const inches = Number(heightData.inches) || 0;
-    return feet * 30.48 + inches * 2.54;
-  }
-
-  return 0;
-}
-
-function getWeightInKg(weightData) {
-  if (!weightData || typeof weightData !== "object") return 0;
-
-  const value = Number(weightData.value) || 0;
-
-  if (weightData.unit === "kg") {
-    return value;
-  }
-
-  if (weightData.unit === "lbs") {
-    return value * 0.45359237;
-  }
-
-  return 0;
-}
-
-function getBmiLabel(bmi) {
-  if (bmi < 25) return "Normal";
-  if (bmi < 30) return "Overweight";
-  return "Obese";
-}
-
-function getBmiPosition(bmi) {
-  const min = 15;
-  const max = 40;
-  const clamped = Math.min(Math.max(bmi, min), max);
-  return ((clamped - min) / (max - min)) * 100;
+// Helper component for the list items
+function AttributeItem({ icon, label, value }) {
+  return (
+    <div className="flex items-center gap-5">
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[20px] shadow-sm border border-[#f0f0ee]">
+        {icon}
+      </div>
+      <div>
+        <p className="text-[10px] font-bold text-[#b0b0ae] uppercase tracking-tighter">{label}</p>
+        <p className="text-[17px] font-bold text-black">{value}</p>
+      </div>
+    </div>
+  );
 }

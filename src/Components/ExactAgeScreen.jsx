@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function ExactAgeScreen({ onContinue, onBack }) {
-  const [age, setAge] = useState("18");
+  const [age, setAge] = useState("");
+  const [error, setError] = useState("");
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -9,105 +10,105 @@ export default function ExactAgeScreen({ onContinue, onBack }) {
   }, []);
 
   const handleChange = (e) => {
-    const raw = e.target.value.replace(/\D/g, "");
+    const raw = e.target.value;
+    let cleaned = raw.replace(/\D/g, "");
+    
+    // Limit to 3 digits (e.g., 100)
+    if (cleaned.length > 3) cleaned = cleaned.slice(0, 3);
+    
+    setAge(cleaned);
 
-    if (raw === "") {
-      setAge("");
-      return;
+    // Validation logic for error messaging
+    if (cleaned.length > 0) {
+      const numericAge = parseInt(cleaned, 10);
+      if (numericAge > 100) {
+        setError("Please enter an age between 18 and 100");
+      } else if (cleaned.length >= 2 && numericAge < 18) {
+        setError("You must be at least 18 years old");
+      } else {
+        setError("");
+      }
+    } else {
+      setError("");
     }
-
-    const numeric = Number(raw);
-
-    if (numeric < 18) {
-      setAge("18");
-      return;
-    }
-
-    if (numeric > 100) {
-      setAge("100");
-      return;
-    }
-
-    setAge(String(numeric));
   };
 
+  const numericAge = parseInt(age, 10);
+  const isValid = numericAge >= 18 && numericAge <= 100;
+
   const handleContinue = () => {
-    const numericAge = Number(age);
-
-    if (!numericAge || numericAge < 18 || numericAge > 100) return;
-
-    onContinue?.(numericAge);
+    if (isValid) {
+      onContinue?.(numericAge);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#f6f6f4] px-1.5 pt-3 pb-8 font-sans">
-      <div className="grid grid-cols-[32px_1fr_auto] items-center gap-2">
-        <button
-          type="button"
-          onClick={onBack}
-          aria-label="Go back"
-          className="text-[24px] leading-none text-[#8e8e8e]"
-        >
-          ←
-        </button>
-
-        <div className="h-[4px] w-full overflow-hidden rounded-full bg-[#e4e4e2]">
-          <div className="h-full w-[87.5%] rounded-full bg-[#356f4b]" />
+    <section className="min-h-screen bg-white px-4 pb-10 pt-4 font-sans text-center">
+      {/* Header & Progress Bar */}
+      <div className="mx-auto max-w-full">
+        <div className="flex items-center justify-between">
+          <button onClick={onBack} className="text-[24px] text-[#b8b8b8]">←</button>
+          <div className="text-[14px] font-medium text-[#6f6f6f]">21 / 24</div>
         </div>
-
-        <div className="pr-2 text-[14px] font-medium text-[#1f1f1f]">
-          21 / 24
+        <div className="mt-2 relative h-[5px] w-full overflow-hidden rounded-full bg-[#e6e6e3]">
+          <div className="h-full w-[87.5%] rounded-full bg-[#2f7a4d]" />
         </div>
       </div>
 
-      <div className="mx-auto mt-10 flex w-full max-w-[560px] flex-col items-center">
-        <h2 className="text-center text-[28px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black">
+      <div className="mx-auto mt-12 max-w-[650px] flex flex-col items-center">
+        <h2 className="text-[26px] font-bold leading-tight text-black">
           What is your age?
         </h2>
 
-        <div className="mt-12 flex min-h-[92px] items-end justify-center">
-          <span className="text-center text-[72px] font-semibold leading-none text-[#d9d9d9]">
-            {age || "18"}
+        {/* Big Number Input with "years" at Right-Bottom */}
+        <div className="mt-16 flex items-baseline justify-center">
+          <input
+            ref={inputRef}
+            type="text"
+            inputMode="numeric"
+            value={age}
+            onChange={handleChange}
+            placeholder="0"
+            className={`bg-transparent text-right text-[35px] font-bold outline-none border-none focus:ring-0 placeholder-[#d4d4d4] leading-none transition-colors ${
+              error ? "text-red-500" : "text-black"
+            }`}
+            style={{ width: age.length > 0 ? `${age.length * 45}px` : "60px" }}
+          />
+          <span className={`ml-1 text-[20px] font-bold pb-2 ${error ? "text-red-500" : "text-black"}`}>
+            years
           </span>
         </div>
 
-        <label htmlFor="exact-age" className="sr-only">
-          Enter your age
-        </label>
-
-        <input
-          ref={inputRef}
-          id="exact-age"
-          type="number"
-          inputMode="numeric"
-          min="18"
-          max="100"
-          value={age}
-          onChange={handleChange}
-          className="mt-3 w-[160px] rounded-lg border border-[#d8d8d8] bg-white px-3 py-2 text-center text-[16px] text-black outline-none focus:border-[#3d7f56]"
-          placeholder="Enter age"
-        />
-
-        <div className="mt-7 flex w-full max-w-[494px] items-center gap-3 rounded-[16px] bg-[#ecece9] px-8 py-6">
-          <div className="text-[28px] leading-none">☝️</div>
-          <p className="text-[15px] font-medium leading-[1.4] text-[#1e1e1e]">
-            This will help us make adjustments to your personal plan.
-          </p>
+        {/* Error Message Space (consistent height to prevent layout jump) */}
+        <div className="h-6 mt-4 flex items-center justify-center">
+          {error && <p className="text-red-500 text-[13px] font-medium">{error}</p>}
         </div>
 
+        {/* Info Box */}
+        <div className="mt-8 w-full rounded-[24px] bg-[#f2f2ee] p-6 text-left animate-in fade-in slide-in-from-bottom-2 duration-300">
+          <div className="flex items-start gap-4">
+            <span className="text-[24px]">☝️</span>
+            <div>
+              <p className="text-[14px] font-medium leading-relaxed text-[#1e1e1e]">
+                This will help us make adjustments to your personal plan to ensure it's safe and effective for your age group.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Button */}
         <button
-          type="button"
+          disabled={!isValid}
           onClick={handleContinue}
-          disabled={!age || Number(age) < 18 || Number(age) > 100}
-          className={`mt-10 h-[46px] w-full max-w-[494px] rounded-[12px] text-[16px] font-semibold text-white transition ${
-            age && Number(age) >= 18 && Number(age) <= 100
-              ? "bg-[#36975f] hover:bg-[#318653]"
-              : "cursor-not-allowed bg-[#36975f]/70"
+          className={`mt-10 w-full rounded-[16px] py-[15px] text-[18px] font-bold text-white transition-all ${
+            isValid 
+              ? "bg-[#3ca05f] hover:bg-[#318451] shadow-md" 
+              : "bg-[#3ca05f] opacity-50 cursor-not-allowed"
           }`}
         >
-          Next
+          Continue
         </button>
       </div>
-    </div>
+    </section>
   );
 }

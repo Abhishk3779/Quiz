@@ -13,12 +13,11 @@ import Transformation from "../assets/Transformation.png";
 
         <div className="mt-8 w-full text-center">
           <h2 className="text-[30px] font-bold leading-[1.15] tracking-[-0.02em] text-black md:text-[24px]">
-            You can always change your habits for the better
+            Small changes can make a big difference
           </h2>
 
           <p className="mx-auto mt-4 max-w-[470px] text-[14px] font-medium leading-[1.45] tracking-[-0.01em] text-[#303030] md:text-[15px]">
-            Big life changes often affect a person&apos;s weight. It&apos;s normal.
-            We will support you until you reach your goal.
+            Many people gain weight after life changes. You are not alone. We will guide you and support you on your journey.
           </p>
         </div>
 
