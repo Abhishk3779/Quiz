@@ -44,8 +44,8 @@ export default function WorkloadScreen({ options = [], onSelect, onBack }) {
       </div>
 
       <div className="mx-auto mt-10 max-w-[520px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black md:text-[38px]">
-          What is your workload?
+        <h2 className="text-center text-[30px] font-bold leading-[1.15] tracking-[-0.02em] text-black md:text-[24px]">
+         What does your daily schedule look like?
         </h2>
 
         <div className="mt-8 space-y-4">

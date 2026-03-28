@@ -61,8 +61,8 @@ export default function BadHabitsScreen({
       </div>
 
       <div className="mx-auto mt-10 max-w-[520px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black md:text-[38px]">
-          Do you have any bad habits?
+        <h2 className="text-center text-[30px] font-bold leading-[1.15] tracking-[-0.02em] text-black md:text-[24px]">
+          Do you have any habits you want to improve?
         </h2>
 
         <div className="mt-8 space-y-4">

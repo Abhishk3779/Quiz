@@ -48,8 +48,8 @@ export default function WaterIntakeScreen({
       </div>
 
       <div className="mx-auto mt-10 max-w-[520px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black md:text-[38px]">
-          What is your daily water intake?
+        <h2 className="text-center text-[30px] font-bold leading-[1.15] tracking-[-0.02em] text-black md:text-[24px]">
+          How much water do you drink each day?
         </h2>
 
         <div className="mt-8 space-y-4">

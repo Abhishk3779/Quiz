@@ -22,7 +22,7 @@ function StruggleOptionCard({ option, onToggle }) {
       </div>
 
       <img
-        src=""
+        src={option.image}
         alt={option.label}
         className="h-[78px] w-[78px] shrink-0 object-cover md:h-[92px] md:w-[92px]"
       />

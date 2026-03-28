@@ -113,86 +113,86 @@ export const strugglesOptions = [
 ];
 
 export const workloadOptions = [
-  { id: 1, label: "9 to 5", emoji: "🌞", selected: false },
-  { id: 2, label: "Night shifts", emoji: "🌘", selected: false },
-  { id: 3, label: "It’s fairly flexible", emoji: "🙂", selected: false },
-  { id: 4, label: "I’m retired", emoji: "🌴", selected: false },
+  { id: 1, label: "I have a fixed daytime schedule", emoji: "🌞", selected: false },
+  { id: 2, label: "I work night shifts", emoji: "🌘", selected: false },
+  { id: 3, label: "I work night shifts", emoji: "🙂", selected: false },
+  { id: 4, label: "I am retired", emoji: "🌴", selected: false },
 ];
 
 export const typicalDayOptions = [
-  { id: 1, label: "I'm on my feet all day long", emoji: "🏃", selected: false },
-  { id: 2, label: "I take active breaks", emoji: "✌", selected: false },
+  { id: 1, label: "I move a lot during the day", emoji: "🏃", selected: false },
+  { id: 2, label: "I move sometimes during breaks", emoji: "✌", selected: false },
   {
     id: 3,
-    label: "I spend most of the day sitting",
+    label: "I sit most of the day",
     emoji: "👩‍💻",
     selected: false,
   },
 ];
 
 export const sleepDurationOptions = [
-  { id: 1, label: "I sleep less than 5 hours", emoji: "😴", selected: false },
-  { id: 2, label: "I sleep around 5-6 hours", emoji: "💤", selected: false },
-  { id: 3, label: "I sleep well for 7-8 hours", emoji: "💪", selected: false },
+  { id: 1, label: "Under 5 hours", emoji: "😴", selected: false },
+  { id: 2, label: "5–6 hours", emoji: "💤", selected: false },
+  { id: 3, label: "7–8 hours", emoji: "💪", selected: false },
   {
     id: 4,
-    label: "I like to sleep longer than 8 hours",
+    label: "Over 8 hours",
     emoji: "🤷‍♀️",
     selected: false,
   },
 ];
 
 export const waterIntakeOptions = [
-  { id: 1, label: "About 2 glasses (16 oz)", emoji: "💧", selected: false },
+  { id: 1, label: "About 1–2 glasses", emoji: "💧", selected: false },
   {
     id: 2,
-    label: "Between 2 - 6 glasses (17 - 51 oz)",
+    label: "Around 3–5 glasses",
     emoji: "💦",
     selected: false,
   },
   {
     id: 3,
-    label: "More than 6 glasses (51 oz >)",
+    label: "6 or more glasses",
     emoji: "😎",
     selected: false,
   },
-  { id: 4, label: "I drink only coffee or tea", emoji: "☕", selected: false },
+  { id: 4, label: "I mostly drink coffee or tea", emoji: "☕", selected: false },
 ];
 
 export const badHabitsOptions = [
   {
     id: 1,
-    label: "I have trouble getting enough sleep",
+    label: "I don’t sleep enough",
     emoji: "😴",
     selected: false,
   },
   {
     id: 2,
-    label: "I find it hard to reduce my sugar intake",
+    label: "I eat too much sugar",
     emoji: "🍫",
     selected: false,
   },
   {
     id: 3,
-    label: "I have an addiction to soda",
+    label: "I drink a lot of soda",
     emoji: "🥤",
     selected: false,
   },
   {
     id: 4,
-    label: "I consume a lot of salty foods",
+    label: "I eat a lot of salty food",
     emoji: "🧂",
     selected: false,
   },
   {
     id: 5,
-    label: "I’m a midnight snacker",
+    label: "I eat late at night",
     emoji: "🌘",
     selected: false,
   },
   {
     id: 6,
-    label: "None of the above",
+    label: "None of these",
     emoji: "",
     selected: false,
   },
@@ -201,19 +201,19 @@ export const badHabitsOptions = [
 export const lifeEventsOptions = [
   {
     id: 1,
-    label: "Marriage or relationship",
+    label: "Relationship or marriage",
     emoji: "💑",
     selected: false,
   },
   {
     id: 2,
-    label: "Busy work schedule",
+    label: "Busy work or daily routine",
     emoji: "👩‍💻",
     selected: false,
   },
   {
     id: 3,
-    label: "Stress or mental health",
+    label: "Stress or emotional health",
     emoji: "🤯",
     selected: false,
   },
@@ -225,13 +225,13 @@ export const lifeEventsOptions = [
   },
   {
     id: 5,
-    label: "Meds or hormonal disorder",
+    label: "Medication or hormones",
     emoji: "💊",
     selected: false,
   },
   {
     id: 6,
-    label: "No similar event",
+    label: "None of these",
     emoji: "",
     selected: false,
   },

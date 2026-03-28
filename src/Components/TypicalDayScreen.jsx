@@ -44,8 +44,8 @@ export default function TypicalDayScreen({ options = [], onSelect, onBack }) {
       </div>
 
       <div className="mx-auto mt-10 max-w-[520px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black md:text-[38px]">
-          How would you describe your typical day?
+        <h2 className="text-center text-[30px] font-bold leading-[1.15] tracking-[-0.02em] text-black md:text-[24px]">
+          What does your day usually look like?
         </h2>
 
         <div className="mt-8 space-y-4">

@@ -61,11 +61,12 @@ export default function LifeEventsScreen({
       </div>
 
       <div className="mx-auto mt-10 max-w-[520px]">
-        <h2 className="text-center text-[30px] font-extrabold leading-[1.15] tracking-[-0.02em] text-black md:text-[38px]">
-          Have any of your life events led to weight gain?
+        <h2 className="text-center text-[30px] font-bold leading-[1.15] tracking-[-0.02em] text-black md:text-[24px]">
+          Have any life changes affected your weight?
         </h2>
 
         <div className="mt-8 space-y-4">
+          <h3 className="font-semibold">You can choose more than one</h3>
           {options.map((option) => (
             <LifeEventOptionCard
               key={option.id}
@@ -81,7 +82,7 @@ export default function LifeEventsScreen({
           disabled={!hasSelection}
           className={`mt-20 w-full rounded-[16px] py-[18px] text-center text-[17px] font-bold leading-none transition ${
             hasSelection
-              ? "bg-[#66b07f] text-white"
+              ? "bg-[#349760] text-white"
               : "bg-[#66b07f] text-[#b8ddc3]"
           }`}
         >
