@@ -747,6 +747,9 @@ if (screen === "salesPlan") {
       answers={answers}
       onBack={() => setScreen("visibleResults")}
       onContinue={() => setScreen("emailSent")}
+      onPurchase={(planData) => {
+        console.log("Selected plan:", planData);
+      }}
     />
   );
 }

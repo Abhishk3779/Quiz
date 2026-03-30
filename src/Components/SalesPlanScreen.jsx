@@ -1,161 +1,490 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+import beforeImg from "../assets/before.png";
+import afterImg from "../assets/after.png";
+import appImg1 from "../assets/app1.png";
+import appImg2 from "../assets/app2.png";
+import appImg3 from "../assets/app3.png";
+import transImg1 from "../assets/trans1.png";
+import transImg2 from "../assets/trans2.png";
+import review1 from "../assets/review1.png";
+import review2 from "../assets/review1.png";
+import review3 from "../assets/review1.png";
 
-export default function SalesPlanScreen({ answers, onPurchase }) {
-  const [timeLeft, setTimeLeft] = useState(897); // 14:57 in seconds
+export default function SalesPlanScreen({ answers, onBack, onContinue, onPurchase }) {
+    const [timeLeft, setTimeLeft] = useState(897);
+    const [selectedPlan, setSelectedPlan] = useState("1-month");
+    const [agreeTop, setAgreeTop] = useState(true);
+    const [agreeBottom, setAgreeBottom] = useState(true);
 
-  // Timer logic
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setTimeLeft((prev) => (prev > 0 ? prev - 1 : 0));
+        }, 1000);
 
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
-  };
+        return () => clearInterval(timer);
+    }, []);
 
-  // Data mapping from previous screens
-  const userName = answers.name || "User";
-  const currentWeight = answers.currentWeight?.weight || 70;
-  const targetWeight = answers.goalWeight?.goalWeight || 60;
-  const unit = answers.currentWeight?.unit || "kg";
+    const formatTime = (seconds) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs < 10 ? "0" : ""}${secs}`;
+    };
 
-  return (
-    <div className="min-h-screen bg-[#f4f7ff] font-sans text-black pb-20">
-      {/* Sticky Header with Timer */}
-      <div className="sticky top-0 z-50 flex items-center justify-between bg-white px-6 py-3 shadow-sm">
-        <div className="text-[14px] font-medium text-gray-500">
-          Discount expires in: <span className="font-bold text-black">{formatTime(timeLeft)}</span>
-        </div>
-        <button className="rounded-full bg-[#1a73e8] px-5 py-2 text-[14px] font-bold text-white shadow-md">
-          Get your plan
-        </button>
-      </div>
+    const currentWeight =
+        Number(answers?.currentWeight?.kg) ||
+        Number(answers?.currentWeight?.value) ||
+        70;
 
-      <div className="mx-auto max-w-[500px] px-4 pt-8">
-        {/* Comparison Section */}
-        <div className="rounded-[24px] bg-white p-8 text-center shadow-sm">
-          <div className="mb-6 flex items-center justify-center gap-8">
-            <div className="flex flex-col items-center">
-              <div className="h-32 w-20 bg-gray-200 rounded-t-full opacity-50 relative overflow-hidden">
-                 {/* Placeholder for "Before" Body Shape */}
-                 <div className="absolute bottom-0 w-full h-[80%] bg-[#ffcc80]" />
-              </div>
-              <p className="mt-2 text-[12px] font-bold uppercase text-gray-400 tracking-tighter">Starting weight</p>
-              <p className="text-[20px] font-extrabold">{currentWeight} {unit}</p>
-            </div>
-            
-            <div className="text-[#1a73e8] text-[32px] font-bold">→</div>
+    const targetWeight =
+        Number(answers?.goalWeight?.kg) ||
+        Number(answers?.goalWeight?.value) ||
+        60;
 
-            <div className="flex flex-col items-center">
-              <div className="h-32 w-20 bg-gray-200 rounded-t-full opacity-50 relative overflow-hidden">
-                 {/* Placeholder for "After" Body Shape */}
-                 <div className="absolute bottom-0 w-full h-[60%] bg-[#81c784]" />
-              </div>
-              <p className="mt-2 text-[12px] font-bold uppercase text-gray-400 tracking-tighter">Goal weight</p>
-              <p className="text-[20px] font-extrabold text-[#2e7d32]">{targetWeight} {unit}</p>
-            </div>
-          </div>
-          <h2 className="text-[22px] font-black leading-tight">
-            Your A1C management plan is customized and waiting, {userName}!
-          </h2>
-        </div>
+    const bodyFatStart = useMemo(() => {
+        const bmi = Number(answers?.currentWeight?.bmi || 28);
+        return bmi >= 30 ? 32 : bmi >= 25 ? 28 : 24;
+    }, [answers]);
 
-        {/* Promo Box */}
-        <div className="mt-4 rounded-2xl bg-[#e3f2fd] p-4 border-2 border-dashed border-[#1a73e8] flex items-center justify-between">
-            <div className="flex items-center gap-3">
-                <div className="bg-[#1a73e8] rounded-full p-1">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+    const bodyFatEnd = useMemo(() => Math.max(14, bodyFatStart - 10), [bodyFatStart]);
+
+    const plans = [
+        {
+            id: "1-month",
+            title: "1-month membership",
+            subtitle: "Ideal solution for trying out the plan",
+            oldDaily: "1.39",
+            newDaily: "0.48",
+            totalOld: "41.82",
+            totalNew: "14.49",
+            badge: "MOST POPULAR - SAVE 65%",
+            selectedBorder: "border-[#6ba7e8]",
+        },
+        {
+            id: "3-month",
+            title: "3-month membership",
+            subtitle: "Great for building new healthy habits",
+            oldDaily: "0.96",
+            newDaily: "0.28",
+            totalOld: "72.25",
+            totalNew: "25.20",
+            badge: "",
+            selectedBorder: "border-[#6ba7e8]",
+        },
+        {
+            id: "6-month",
+            title: "6-month membership",
+            subtitle: "For achieving the best health results",
+            oldDaily: "0.48",
+            newDaily: "0.17",
+            totalOld: "89.59",
+            totalNew: "29.95",
+            badge: "",
+            selectedBorder: "border-[#6ba7e8]",
+        },
+    ];
+
+    const selectedPlanData = plans.find((p) => p.id === selectedPlan) || plans[0];
+
+    const handlePrimaryAction = () => {
+        if (onPurchase) onPurchase(selectedPlanData);
+        if (onContinue) onContinue(selectedPlanData);
+    };
+
+    return (
+        <div className="min-h-screen bg-[#f6fbff] text-black">
+            <div className="sticky top-0 z-50 border-b border-[#e8eef6] bg-white">
+                <div className="mx-auto flex max-w-[980px] items-center justify-between px-3 py-3 sm:px-4">
+                    <div className="flex items-center gap-3">
+                        {onBack ? (
+                            <button
+                                type="button"
+                                onClick={onBack}
+                                className="text-[22px] leading-none text-[#7f8793]"
+                            >
+                                ←
+                            </button>
+                        ) : null}
+                        <div className="text-[11px] text-[#6f7680] sm:text-[12px]">
+                            Discount reserved for{" "}
+                            <span className="text-[22px] font-bold leading-none text-black">
+                                {formatTime(timeLeft)}
+                            </span>
+                        </div>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handlePrimaryAction}
+                        className="rounded-[7px] bg-[#1f7ceb] px-5 py-2 text-[12px] font-bold text-white shadow-sm transition hover:bg-[#1869c7]"
+                    >
+                        Get your plan
+                    </button>
                 </div>
-                <span className="text-[14px] font-bold text-[#1a73e8]">Your promo code applied</span>
             </div>
-            <span className="text-[12px] font-black text-gray-400 uppercase">HEALTHY-START</span>
-        </div>
 
-        {/* Membership Options */}
-        <div className="mt-6 space-y-3">
-          <PlanCard title="1-month membership" price="0.45" original="1.20" isPopular={true} />
-          <PlanCard title="3-month membership" price="0.29" original="0.85" />
-          <PlanCard title="6-month membership" price="0.17" original="0.60" />
-        </div>
+            <div className="mx-auto max-w-[980px] px-3 pb-16 pt-6 sm:px-4">
+                <section className="mx-auto max-w-[600px]">
+                    <div className="rounded-[8px] bg-[#e8f2ff] px-5 py-6">
+                        <div className="flex items-center justify-center gap-5 sm:gap-10">
+                            <BodyPreviewCard
+                                image={beforeImg}
+                                fatText={`+${bodyFatStart}%`}
+                                level="Low"
+                            />
 
-        <button className="mt-8 w-full rounded-2xl bg-[#1a73e8] py-5 text-[18px] font-black text-white shadow-xl hover:bg-[#1557b0] transition-transform active:scale-95">
-          Get your plan
-        </button>
+                            <BodyPreviewCard
+                                image={afterImg}
+                                fatText={`${bodyFatEnd}-${bodyFatEnd + 6}%`}
+                                level="High"
+                            />
+                        </div>
+                    </div>
+                    <p className="mt-2 text-center text-[10px] text-[#878787]">
+                        Provided results may vary
+                    </p>
+                </section>
 
-        {/* Features / Screenshots Section */}
-        <div className="mt-16 text-center">
-          <h3 className="text-[22px] font-black mb-8">Track your wins and stay motivated</h3>
-          <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
-            <AppScreenshot img="📱" title="Smart Tracking" />
-            <AppScreenshot img="🥗" title="Meal Plans" />
-            <AppScreenshot img="📊" title="Progress" />
-          </div>
-        </div>
+                <section className="mx-auto mt-10 max-w-[780px] text-center">
+                    <h1 className="text-[30px] font-extrabold leading-tight text-[#2f2f2f] sm:text-[42px]">
+                        Your A1C management plan is customized
+                        <br className="hidden sm:block" /> and waiting!
+                    </h1>
+                </section>
 
-        {/* Social Proof */}
-        <div className="mt-16 bg-white rounded-[32px] p-8 shadow-sm">
-           <h3 className="text-[20px] font-black text-center mb-6">Success stories from our members</h3>
-           <Testimonial name="Sophie H." text="I lost 12kg in just 3 months! The plan was so easy to follow and the support was incredible." stars={5} />
-        </div>
+                <div className="mx-auto mt-8 max-w-[780px]">
+                    <PromoStrip timeLeft={formatTime(timeLeft)} />
+                </div>
 
-        {/* Guarantee */}
-        <div className="mt-16 text-center px-4">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#2e7d32]">
-                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                <section className="mx-auto mt-8 max-w-[980px]">
+                    <div className="grid gap-4 lg:grid-cols-3">
+                        {plans.map((plan) => (
+                            <PricingCard
+                                key={plan.id}
+                                plan={plan}
+                                checked={selectedPlan === plan.id}
+                                onSelect={() => setSelectedPlan(plan.id)}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="mt-4 flex items-start gap-2 px-1 text-[11px] leading-5 text-[#7d7d7d]">
+                        <input
+                            id="agreeTop"
+                            type="checkbox"
+                            checked={agreeTop}
+                            onChange={(e) => setAgreeTop(e.target.checked)}
+                            className="mt-0.5 h-3.5 w-3.5 rounded border-[#cad2dc]"
+                        />
+                        <label htmlFor="agreeTop">
+                            I agree to the <span className="underline">T&amp;Cs</span> and I have read and understood the{" "}
+                            <span className="underline">Privacy Policy</span>.
+                        </label>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handlePrimaryAction}
+                        disabled={!agreeTop}
+                        className={`mx-auto mt-5 block w-full max-w-[300px] rounded-[8px] py-3 text-[15px] font-bold text-white transition ${agreeTop ? "bg-[#1f7ceb] hover:bg-[#1869c7]" : "cursor-not-allowed bg-[#1f7ceb]/50"
+                            }`}
+                    >
+                        Get your plan
+                    </button>
+
+                    <div className="mx-auto mt-5 max-w-[760px] px-2 text-center text-[10px] leading-5 text-[#8e8e8e]">
+                        By clicking "Get your plan" I acknowledge and agree to pay{" "}
+                        <span className="font-semibold text-[#555]">USD {selectedPlanData.totalNew}</span> for my membership.
+                        I understand that unless I cancel before the end of the current introductory period,
+                        MyBody will automatically charge my payment method the regular price of{" "}
+                        <span className="font-semibold text-[#555]">USD {selectedPlanData.totalOld}</span> every month thereafter.
+                        I can easily cancel my subscription online.
+                    </div>
+                </section>
+
+                <section className="mt-14 bg-[#eaf4ff] px-4 py-14 sm:px-8">
+                    <div className="mx-auto max-w-[980px]">
+                        <h2 className="text-center text-[28px] font-extrabold leading-tight text-[#2f2f2f] sm:text-[36px]">
+                            Track your wins and stay motivated
+                        </h2>
+
+                        <div className="mt-10 grid gap-4 md:grid-cols-3">
+                            <AppShot image={appImg1} />
+                            <AppShot image={appImg2} />
+                            <AppShot image={appImg3} />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="bg-white px-4 py-14 sm:px-8">
+                    <div className="mx-auto max-w-[980px]">
+                        <h2 className="text-center text-[28px] font-extrabold leading-tight text-[#2f2f2f] sm:text-[34px]">
+                            Success stories from our members
+                        </h2>
+
+                        <div className="mt-10 grid gap-4 md:grid-cols-3">
+                            <ReviewBox
+                                image={review1}
+                                name="Sophia M."
+                                text="Dropped 8 lbs in just a few weeks without feeling like I was even dieting! The meals are super filling, tasty and everything is easy to follow. Honestly, best decision ever."
+                            />
+                            <ReviewBox
+                                image={review2}
+                                name="Marcus H."
+                                text="The plan is simple to follow and fits into my daily life. My fasting blood sugar dropped by 15 points in the first month, which I didn’t expect. Already feeling a huge difference in my energy."
+                            />
+                            <ReviewBox
+                                image={review3}
+                                name="Lily S."
+                                text="I feel amazing! My cravings are way down, my sleep is better and I don’t feel so bloated after meals. #NewMe"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                <section className="bg-[#eaf4ff] px-4 py-14 sm:px-8">
+                    <div className="mx-auto max-w-[980px]">
+                        <h2 className="text-center text-[28px] font-extrabold leading-tight text-[#2f2f2f] sm:text-[34px]">
+                            They did this – you can too
+                        </h2>
+
+                        <div className="mt-10 flex flex-wrap items-center justify-center gap-8">
+                            <TransformCard image={transImg1} rotate="-rotate-3" />
+                            <TransformCard image={transImg2} rotate="rotate-3" />
+                        </div>
+
+                        <p className="mt-4 text-center text-[10px] text-[#878787]">
+                            Provided results may vary
+                        </p>
+                    </div>
+                </section>
+
+                <section className="mx-auto mt-14 max-w-[780px] text-center">
+                    <h2 className="text-[30px] font-extrabold leading-tight text-[#2f2f2f] sm:text-[42px]">
+                        Your A1C management plan is customized
+                        <br className="hidden sm:block" /> and waiting!
+                    </h2>
+                </section>
+
+                <div className="mx-auto mt-8 max-w-[780px]">
+                    <PromoStrip timeLeft={formatTime(timeLeft)} />
+                </div>
+
+                <section className="mx-auto mt-8 max-w-[980px]">
+                    <div className="grid gap-4 lg:grid-cols-3">
+                        {plans.map((plan) => (
+                            <PricingCard
+                                key={`bottom-${plan.id}`}
+                                plan={plan}
+                                checked={selectedPlan === plan.id}
+                                onSelect={() => setSelectedPlan(plan.id)}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="mt-4 flex items-start gap-2 px-1 text-[11px] leading-5 text-[#7d7d7d]">
+                        <input
+                            id="agreeBottom"
+                            type="checkbox"
+                            checked={agreeBottom}
+                            onChange={(e) => setAgreeBottom(e.target.checked)}
+                            className="mt-0.5 h-3.5 w-3.5 rounded border-[#cad2dc]"
+                        />
+                        <label htmlFor="agreeBottom">
+                            I agree to the <span className="underline">T&amp;Cs</span> and I have read and understood the{" "}
+                            <span className="underline">Privacy Policy</span>.
+                        </label>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={handlePrimaryAction}
+                        disabled={!agreeBottom}
+                        className={`mx-auto mt-5 block w-full max-w-[300px] rounded-[8px] py-3 text-[15px] font-bold text-white transition ${agreeBottom ? "bg-[#1f7ceb] hover:bg-[#1869c7]" : "cursor-not-allowed bg-[#1f7ceb]/50"
+                            }`}
+                    >
+                        Get your plan
+                    </button>
+
+                    <div className="mx-auto mt-5 max-w-[760px] px-2 text-center text-[10px] leading-5 text-[#8e8e8e]">
+                        By clicking "Get your plan" I acknowledge and agree to pay{" "}
+                        <span className="font-semibold text-[#555]">USD {selectedPlanData.totalNew}</span> for my membership.
+                        I understand that unless I cancel before the end of the current introductory period,
+                        MyBody will automatically charge my payment method the regular price of{" "}
+                        <span className="font-semibold text-[#555]">USD {selectedPlanData.totalOld}</span> every month thereafter.
+                        I can easily cancel my subscription online.
+                    </div>
+                </section>
+
+                <section className="mt-14 bg-[#eaf4ff] px-4 py-14 sm:px-8">
+                    <div className="mx-auto max-w-[760px] text-center">
+                        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#2fb35e] text-white shadow-sm">
+                            <svg
+                                className="h-7 w-7"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="3"
+                            >
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </div>
+
+                        <h2 className="mt-5 text-[28px] font-extrabold text-[#2f2f2f] sm:text-[38px]">
+                            30 days money-back guarantee
+                        </h2>
+
+                        <p className="mx-auto mt-4 max-w-[650px] text-[14px] leading-7 text-[#6d7785]">
+                            We are confident in our program, and you should start seeing results within a month! If you don’t
+                            notice any changes, we’ll give you a full refund.
+                        </p>
+
+                        <button
+                            type="button"
+                            className="mt-5 text-[13px] font-medium text-[#6984a5] underline"
+                        >
+                            Learn about applicable limitations.
+                        </button>
+                    </div>
+                </section>
             </div>
-            <h4 className="text-[18px] font-black">30 days money-back guarantee</h4>
-            <p className="mt-2 text-[14px] text-gray-500 leading-relaxed">
-                We are confident in our program and you will start seeing results within two weeks! 
-                If you don't notice any changes, we'll give your money back.
-            </p>
         </div>
-      </div>
-    </div>
-  );
+    );
 }
 
-// Sub-components for cleaner code
-function PlanCard({ title, price, original, isPopular }) {
-  return (
-    <div className={`relative rounded-2xl bg-white p-5 border-2 transition-all ${isPopular ? "border-[#2e7d32] shadow-md" : "border-transparent"}`}>
-      {isPopular && (
-          <div className="absolute -top-3 left-6 bg-[#2e7d32] text-white text-[10px] font-black px-3 py-1 rounded-full uppercase">Most Popular</div>
-      )}
-      <div className="flex justify-between items-center">
-        <div>
-            <p className="text-[16px] font-black">{title}</p>
-            <p className="text-[12px] text-gray-400 line-through">USD {original} / day</p>
-        </div>
-        <div className="text-right">
-            <p className="text-[22px] font-black text-[#2e7d32]">USD {price}</p>
-            <p className="text-[12px] font-bold text-gray-400">per day</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function AppScreenshot({ img, title }) {
+function PromoStrip({ timeLeft }) {
     return (
-        <div className="min-w-[160px] h-[280px] bg-white rounded-[24px] border border-gray-100 flex flex-col items-center justify-center shadow-sm">
-            <span className="text-[40px] mb-4">{img}</span>
-            <p className="font-bold text-gray-400 uppercase text-[10px] tracking-widest">{title}</p>
+        <div className="grid overflow-hidden rounded-[12px] bg-[#e8f2ff] sm:grid-cols-[1fr_140px]">
+            <div className="border-b border-[#d6e3f5] px-4 py-4 sm:border-b-0 sm:border-r sm:px-5">
+                <div className="flex items-center gap-2 text-[13px] font-semibold text-[#355271]">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#247de9] text-[10px] text-white">
+                        ✓
+                    </span>
+                    Your promo code applied!
+                </div>
+
+                <div className="mt-3 flex h-[40px] items-center justify-between rounded-[8px] bg-white px-3 text-[12px] text-[#4c4c4c]">
+                    <span>asdasd_mar14</span>
+                    <span className="text-[#5eb67a]">✓</span>
+                </div>
+            </div>
+
+            <div className="flex flex-col items-center justify-center px-4 py-4">
+                <div className="text-[10px] text-[#7b8796]">Expires in:</div>
+                <div className="mt-1 text-[15px] font-bold text-[#1f7ceb]">{timeLeft}</div>
+            </div>
         </div>
-    )
+    );
 }
 
-function Testimonial({ name, text, stars }) {
+function BodyPreviewCard({ image, fatText, level }) {
     return (
-        <div className="border-b border-gray-100 py-6 last:border-0">
-            <div className="flex gap-1 mb-2">
-                {[...Array(stars)].map((_, i) => <span key={i} className="text-[#ffb300]">★</span>)}
+        <div className="flex w-[118px] flex-col items-center text-center sm:w-[150px]">
+            <div className="h-[150px] w-[78px] overflow-hidden rounded-[18px] bg-[#d7e3f4] sm:h-[180px] sm:w-[92px]">
+                <img
+                    src={image}
+                    alt="body preview"
+                    className="h-full w-full object-cover"
+                />
             </div>
-            <p className="text-[14px] italic text-gray-600 mb-3">"{text}"</p>
-            <p className="text-[14px] font-black">— {name}</p>
+
+            <div className="mt-3 text-[10px] leading-4 text-[#2f2f2f] sm:text-[11px]">
+                <div>Body fat</div>
+                <div className="font-bold">{fatText}</div>
+                <div>Wellness level</div>
+                <div>{level}</div>
+            </div>
         </div>
-    )
+    );
+}
+
+function PricingCard({ plan, checked, onSelect }) {
+    return (
+        <div
+            className={`relative rounded-[14px] border bg-white px-4 pb-4 pt-5 ${checked ? "border-[#72aae8] shadow-[0_0_0_1px_#72aae8]" : "border-[#dde4eb]"
+                }`}
+        >
+            {plan.badge ? (
+                <div className="absolute left-0 right-0 top-0 rounded-t-[14px] bg-[#58b36a] py-1 text-center text-[10px] font-bold text-white">
+                    {plan.badge}
+                </div>
+            ) : null}
+
+            <div className={plan.badge ? "pt-2" : ""}>
+                <div className="flex items-start justify-between gap-3">
+                    <div>
+                        <h3 className="text-[15px] font-bold text-[#2f2f2f]">{plan.title}</h3>
+                        <p className="mt-1 text-[11px] leading-4 text-[#878d95]">{plan.subtitle}</p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={onSelect}
+                        className={`mt-1 flex h-4 w-4 items-center justify-center rounded-full border ${checked ? "border-[#2f2f2f]" : "border-[#c7ced6]"
+                            }`}
+                    >
+                        {checked ? <span className="h-2 w-2 rounded-full bg-[#2f2f2f]" /> : null}
+                    </button>
+                </div>
+
+                <div className="mt-4 text-[11px] text-[#cf7489] line-through">USD {plan.oldDaily}</div>
+
+                <div className="mt-1 flex items-end gap-1">
+                    <span className="text-[32px] font-extrabold leading-none text-[#202020]">
+                        USD {plan.newDaily}
+                    </span>
+                    <span className="pb-1 text-[12px] text-[#6f6f6f]">/ day</span>
+                </div>
+
+                <div className="mt-4 text-[11px] text-[#c77e8d]">
+                    Total <span className="line-through">USD {plan.totalOld}</span>{" "}
+                    <span className="font-semibold text-[#777]">USD {plan.totalNew}</span>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function AppShot({ image }) {
+    return (
+        <div className="rounded-[10px] bg-[#d8eaff] p-4">
+            <div className="mx-auto h-[250px] w-[145px] overflow-hidden rounded-[24px] border-[8px] border-black bg-white shadow-sm">
+                <img
+                    src={image}
+                    alt="app screenshot"
+                    className="h-full w-full object-cover"
+                />
+            </div>
+        </div>
+    );
+}
+
+function ReviewBox({ name, text }) {
+    return (
+        <div className="rounded-[12px] bg-white p-4 shadow-sm">
+            <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[#ededed] text-[11px] font-semibold text-[#747474]">
+                    Img
+                </div>
+                <div>
+                    <div className="text-[13px] font-bold text-[#303030]">{name}</div>
+                    <div className="text-[11px] text-[#f5a623]">★★★★★</div>
+                </div>
+            </div>
+            <p className="mt-3 text-[12px] leading-5 text-[#69707a]">“{text}”</p>
+        </div>
+    );
+}
+
+function TransformCard({ image, rotate }) {
+    return (
+        <div
+            className={`h-[210px] w-[118px] overflow-hidden rounded-[10px] border border-[#bfd0e0] bg-white shadow-sm ${rotate}`}
+        >
+            <img
+                src={image}
+                alt="transformation"
+                className="h-full w-full object-cover"
+            />
+        </div>
+    );
 }
