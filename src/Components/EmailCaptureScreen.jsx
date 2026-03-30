@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 
+const USE_BACKEND_EMAIL = false;
+
 export default function EmailCaptureScreen({ answers, onBack, onSuccess }) {
   const [email, setEmail] = useState(answers?.email || "");
   const [isSending, setIsSending] = useState(false);
@@ -19,6 +21,16 @@ export default function EmailCaptureScreen({ answers, onBack, onSuccess }) {
     setMessage("");
     setIsError(false);
 
+    if (!USE_BACKEND_EMAIL) {
+      setTimeout(() => {
+        setMessage("Temporary mode: moving to next page.");
+        setIsError(false);
+        setIsSending(false);
+        onSuccess?.(email.trim());
+      }, 500);
+      return;
+    }
+
     try {
       const response = await fetch("/api/send-plan", {
         method: "POST",
@@ -31,18 +43,26 @@ export default function EmailCaptureScreen({ answers, onBack, onSuccess }) {
         }),
       });
 
-      const data = await response.json();
+      let data = null;
+      const contentType = response.headers.get("content-type");
+
+      if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        const text = await response.text();
+        data = text ? { message: text } : null;
+      }
 
       if (!response.ok) {
         throw new Error(data?.message || "Failed to send email");
       }
 
-      setMessage("Your plan has been sent successfully.");
+      setMessage(data?.message || "Your plan has been sent successfully.");
       setIsError(false);
 
       setTimeout(() => {
         onSuccess?.(email.trim());
-      }, 800);
+      }, 700);
     } catch (error) {
       setMessage(error.message || "Something went wrong while sending email.");
       setIsError(true);
@@ -71,7 +91,7 @@ export default function EmailCaptureScreen({ answers, onBack, onSuccess }) {
           </h2>
 
           <p className="mx-auto mt-4 max-w-[430px] text-center text-[15px] leading-7 text-[#5f5f5f]">
-            We’ll send your plan summary and next steps to your inbox.
+            We&apos;ll send your plan summary and next steps to your inbox.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-10">
@@ -80,7 +100,7 @@ export default function EmailCaptureScreen({ answers, onBack, onSuccess }) {
               placeholder="Enter your email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-[56px] w-full rounded-[16px] border border-[#dcdcdc] bg-[#fafafa] px-4 text-[16px] outline-none transition focus:border-[#36975f]"
+              className="h-[56px] w-full rounded-[16px] border border-[#dcdcdc] bg-[#eef3fb] px-4 text-[16px] outline-none transition focus:border-[#36975f]"
             />
 
             <button

@@ -63,8 +63,8 @@ export default function PlanLoadingScreen({ onComplete, onBack }) {
   }, [progress]);
 
   return (
-    <section className="min-h-screen bg-[#f3f3f3] px-4 py-8 font-sans">
-      <div className="mx-auto max-w-[760px]">
+    <section className="min-h-screen bg-[#f3f3f3] px-4 py-4 font-sans">
+      <div className="mx-auto w-full">
         <div className="flex items-center justify-between">
           <button
             type="button"
@@ -76,7 +76,7 @@ export default function PlanLoadingScreen({ onComplete, onBack }) {
           <div className="text-[14px] font-medium text-[#666]">Generating plan</div>
         </div>
 
-        <div className="mt-8 flex flex-col items-center">
+        <div className="mt-8 flex flex-col items-center" >
           <div className="relative flex h-[220px] w-[220px] items-center justify-center">
             <svg
               height={circle.radius * 2}
@@ -115,7 +115,7 @@ export default function PlanLoadingScreen({ onComplete, onBack }) {
           </h2>
         </div>
 
-        <div className="mt-14 grid gap-4 sm:grid-cols-3">
+        <div className="mt-14 grid gap-4 sm:grid-cols-3 max-w-[860px] mx-auto">
           {REVIEWS.map((review) => (
             <div
               key={review.id}

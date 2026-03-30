@@ -35,6 +35,7 @@ import GoalProjectionScreen from "./GoalProjectionScreen";
 import PlanLoadingScreen from "./PlanLoadingScreen";
 import EmailCaptureScreen from "./EmailCaptureScreen";
 import EmailSentScreen from "./EmailSentScreen";
+import VisibleResultsScreen from "./VisibleResultsScreen";
 import {
   ageQuestion,
   initialGoalOptions,
@@ -751,7 +752,7 @@ if (screen === "emailCapture") {
       onSuccess={(email) => {
         setAnswers((prev) => ({ ...prev, email }));
         setSentEmail(email);
-        setScreen("emailSent");
+        setScreen("VisibleResultsScreen");
       }}
     />
   );

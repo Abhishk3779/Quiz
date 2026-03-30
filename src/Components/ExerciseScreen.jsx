@@ -1,8 +1,8 @@
 function ExerciseOptionCard({ option, onSelect }) {
   return (
-    <button
+   <button
       onClick={() => onSelect(option.label)}
-      className={`flex min-h-[80px] w-[600px] mx-auto items-center justify-between rounded-[14px] px-6 transition ${
+      className={`flex min-h-[78px] w-[650px] mx-auto items-center justify-between rounded-[14px] px-7 transition ${
         option.selected ? "bg-[#3b9b5d]" : "bg-[#ecebe7]"
       }`}
     >
@@ -25,7 +25,7 @@ function ExerciseOptionCard({ option, onSelect }) {
 
 export default function ExerciseScreen({ options, onSelect, onBack }) {
   return (
-    <section className="min-h-screen bg-[#f3f3f3] px-4 pb-10 pt-4">
+    <section className="min-h-screen bg-[#f3f3f3] px-4 pb-10 pt-2">
       {/* Top */}
       <div className="w-full">
         <div className="mb-2 flex items-center justify-between text-[#a8a8a8]">
