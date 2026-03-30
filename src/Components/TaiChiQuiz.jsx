@@ -81,7 +81,6 @@ export default function TaiChiQuiz() {
   const [lifeEventsChoices, setLifeEventsChoices] = useState(lifeEventsOptions);
   const [specialOccasions] = useState(specialOccasionOptions);
   const [sentEmail, setSentEmail] = useState("");
-
   function handleAgeSelect(option) {
     setAnswers((prev) => ({ ...prev, ageGroup: option }));
     setScreen("social");
@@ -420,10 +419,10 @@ export default function TaiChiQuiz() {
     console.log("Final answers:", finalAnswers);
   }
 
-function handleEventDateContinue(eventDate) {
-  setAnswers((prev) => ({ ...prev, eventDate }));
-  setScreen("goalProjection");
-}
+  function handleEventDateContinue(eventDate) {
+    setAnswers((prev) => ({ ...prev, eventDate }));
+    setScreen("goalProjection");
+  }
 
   if (screen === "age") {
     return <AgeScreen question={ageQuestion} onSelect={handleAgeSelect} />;
@@ -702,28 +701,28 @@ function handleEventDateContinue(eventDate) {
     );
   }
 
-if (screen === "eventDate") {
-  return (
-    <EventDateScreen
-      initialDate={answers.eventDate}
-      onContinue={handleEventDateContinue}
-      onBack={() => setScreen("specialOccasion")}
-    />
-  );
-}
+  if (screen === "eventDate") {
+    return (
+      <EventDateScreen
+        initialDate={answers.eventDate}
+        onContinue={handleEventDateContinue}
+        onBack={() => setScreen("specialOccasion")}
+      />
+    );
+  }
 
-// if (screen === "goalProjection") {
-//   return (
-//     <GoalProjectionScreen
-//       answers={answers}
-//       onContinue={() => {
-//         console.log("Final answers:", answers);
-//         // next screen here
-//       }}
-//       onBack={() => setScreen("eventDate")}
-//     />
-//   );
-// }
+  // if (screen === "goalProjection") {
+  //   return (
+  //     <GoalProjectionScreen
+  //       answers={answers}
+  //       onContinue={() => {
+  //         console.log("Final answers:", answers);
+  //         // next screen here
+  //       }}
+  //       onBack={() => setScreen("eventDate")}
+  //     />
+  //   );
+  // }
 
 if (screen === "goalProjection") {
   return (
@@ -752,15 +751,28 @@ if (screen === "emailCapture") {
       onSuccess={(email) => {
         setAnswers((prev) => ({ ...prev, email }));
         setSentEmail(email);
-        setScreen("VisibleResultsScreen");
+        setScreen("visibleResults");
       }}
     />
   );
 }
 
-if (screen === "emailSent") {
-  return <EmailSentScreen email={sentEmail} />;
+if (screen === "visibleResults") {
+  return (
+    <VisibleResultsScreen
+      answers={answers}
+      onContinue={() => {
+        console.log("Final answers:", answers);
+        setScreen("emailSent");
+      }}
+      onBack={() => setScreen("emailCapture")}
+    />
+  );
 }
+
+  if (screen === "emailSent") {
+    return <EmailSentScreen email={sentEmail} />;
+  }
 
   return null;
 }
