@@ -36,6 +36,7 @@ import PlanLoadingScreen from "./PlanLoadingScreen";
 import EmailCaptureScreen from "./EmailCaptureScreen";
 import EmailSentScreen from "./EmailSentScreen";
 import VisibleResultsScreen from "./VisibleResultsScreen";
+import SalesPlanScreen from "./SalesPlanScreen";
 import {
   ageQuestion,
   initialGoalOptions,
@@ -61,6 +62,7 @@ import {
 export default function TaiChiQuiz() {
   const [screen, setScreen] = useState("age");
   const [answers, setAnswers] = useState({});
+  const [sentEmail, setSentEmail] = useState("");
 
   const [goals, setGoals] = useState(initialGoalOptions);
   const [buildChoices, setBuildChoices] = useState(buildOptions);
@@ -80,7 +82,7 @@ export default function TaiChiQuiz() {
   const [badHabitsChoices, setBadHabitsChoices] = useState(badHabitsOptions);
   const [lifeEventsChoices, setLifeEventsChoices] = useState(lifeEventsOptions);
   const [specialOccasions] = useState(specialOccasionOptions);
-  const [sentEmail, setSentEmail] = useState("");
+
   function handleAgeSelect(option) {
     setAnswers((prev) => ({ ...prev, ageGroup: option }));
     setScreen("social");
@@ -95,7 +97,10 @@ export default function TaiChiQuiz() {
   }
 
   function handleGoalsContinue() {
-    const selectedGoals = goals.filter((goal) => goal.selected).map((goal) => goal.label);
+    const selectedGoals = goals
+      .filter((goal) => goal.selected)
+      .map((goal) => goal.label);
+
     setAnswers((prev) => ({ ...prev, goals: selectedGoals }));
     setScreen("resultIntro");
   }
@@ -131,7 +136,10 @@ export default function TaiChiQuiz() {
   }
 
   function handleTargetZonesContinue() {
-    const selectedZones = targetZones.filter((item) => item.selected).map((item) => item.label);
+    const selectedZones = targetZones
+      .filter((item) => item.selected)
+      .map((item) => item.label);
+
     setAnswers((prev) => ({ ...prev, targetZones: selectedZones }));
     setScreen("bestShape");
   }
@@ -380,10 +388,10 @@ export default function TaiChiQuiz() {
     setScreen("name");
   }
 
- function handleNameContinue(nameValue) {
-  setAnswers((prev) => ({ ...prev, name: nameValue }));
-  setScreen("wellnessProfile");
-}
+  function handleNameContinue(nameValue) {
+    setAnswers((prev) => ({ ...prev, name: nameValue }));
+    setScreen("wellnessProfile");
+  }
 
   function handleWellnessProfileContinue() {
     setScreen("walkingBenefit");
@@ -399,19 +407,9 @@ export default function TaiChiQuiz() {
   }
 
   function handleEventDateContinue(eventDate) {
-    const finalAnswers = { ...answers, eventDate };
-    setAnswers(finalAnswers);
-    console.log("Final answers:", finalAnswers);
-  }
-
-  function handleEventDateContinue(eventDate) {
     setAnswers((prev) => ({ ...prev, eventDate }));
     setScreen("goalProjection");
   }
-  function handleWellnessProfileContinue() {
-  // Instead of ending or going to a generic page, go to the sales plan
-  setScreen("salesPlan");
-}
 
   if (screen === "age") {
     return <AgeScreen question={ageQuestion} onSelect={handleAgeSelect} />;
@@ -700,60 +698,44 @@ export default function TaiChiQuiz() {
     );
   }
 
-  // if (screen === "goalProjection") {
-  //   return (
-  //     <GoalProjectionScreen
-  //       answers={answers}
-  //       onContinue={() => {
-  //         console.log("Final answers:", answers);
-  //         // next screen here
-  //       }}
-  //       onBack={() => setScreen("eventDate")}
-  //     />
-  //   );
-  // }
+  if (screen === "goalProjection") {
+    return (
+      <GoalProjectionScreen
+        answers={answers}
+        onContinue={() => setScreen("planLoading")}
+        onBack={() => setScreen("eventDate")}
+      />
+    );
+  }
 
-if (screen === "goalProjection") {
-  return (
-    <GoalProjectionScreen
-      answers={answers}
-      onContinue={() => setScreen("planLoading")}
-      onBack={() => setScreen("eventDate")}
-    />
-  );
-}
+  if (screen === "planLoading") {
+    return (
+      <PlanLoadingScreen
+        onComplete={() => setScreen("emailCapture")}
+        onBack={() => setScreen("goalProjection")}
+      />
+    );
+  }
 
-if (screen === "planLoading") {
-  return (
-    <PlanLoadingScreen
-      onComplete={() => setScreen("emailCapture")}
-      onBack={() => setScreen("goalProjection")}
-    />
-  );
-}
-
-if (screen === "emailCapture") {
-  return (
-    <EmailCaptureScreen
-      answers={answers}
-      onBack={() => setScreen("planLoading")}
-      onSuccess={(email) => {
-        setAnswers((prev) => ({ ...prev, email }));
-        setSentEmail(email);
-        setScreen("visibleResults");
-      }}
-    />
-  );
-}
+  if (screen === "emailCapture") {
+    return (
+      <EmailCaptureScreen
+        answers={answers}
+        onBack={() => setScreen("planLoading")}
+        onSuccess={(email) => {
+          setAnswers((prev) => ({ ...prev, email }));
+          setSentEmail(email);
+          setScreen("visibleResults");
+        }}
+      />
+    );
+  }
 
 if (screen === "visibleResults") {
   return (
     <VisibleResultsScreen
       answers={answers}
-      onContinue={() => {
-        console.log("Final answers:", answers);
-        setScreen("emailSent");
-      }}
+      onContinue={() => setScreen("salesPlan")}
       onBack={() => setScreen("emailCapture")}
     />
   );
@@ -761,9 +743,10 @@ if (screen === "visibleResults") {
 
 if (screen === "salesPlan") {
   return (
-    <SalesPlanScreen 
-      answers={answers} 
-      onPurchase={(planData) => console.log("Plan selected:", planData)} 
+    <SalesPlanScreen
+      answers={answers}
+      onBack={() => setScreen("visibleResults")}
+      onContinue={() => setScreen("emailSent")}
     />
   );
 }
