@@ -447,7 +447,7 @@ function PricingCard({ plan, checked, onSelect }) {
 function AppShot({ image }) {
     return (
         <div className="rounded-[10px] bg-[#d8eaff] p-4">
-            <div className="mx-auto h-[250px] w-[145px] overflow-hidden rounded-[24px] border-[8px] border-black bg-white shadow-sm">
+            <div className="mx-auto h-[200px] w-[190px] overflow-hidden rounded-[24px] border-[0px] border-black bg-white shadow-sm">
                 <img
                     src={image}
                     alt="app screenshot"
