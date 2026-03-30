@@ -366,27 +366,12 @@ export default function TaiChiQuiz() {
   }
 
   function handleWeightContinue(weightData) {
-    setAnswers((prev) => ({
-      ...prev,
-      currentWeight: {
-        value: weightData.value,
-        unit: weightData.unit,
-        kg: weightData.kg,
-        bmi: weightData.bmi,
-      },
-    }));
+    setAnswers((prev) => ({ ...prev, currentWeight: weightData }));
     setScreen("goalWeight");
   }
 
   function handleGoalWeightContinue(goalData) {
-    setAnswers((prev) => ({
-      ...prev,
-      goalWeight: {
-        value: goalData.value,
-        unit: goalData.unit,
-        kg: goalData.kg,
-      },
-    }));
+    setAnswers((prev) => ({ ...prev, goalWeight: goalData }));
     setScreen("exactAge");
   }
 
@@ -395,10 +380,10 @@ export default function TaiChiQuiz() {
     setScreen("name");
   }
 
-  function handleNameContinue(nameValue) {
-    setAnswers((prev) => ({ ...prev, name: nameValue }));
-    setScreen("wellnessProfile");
-  }
+ function handleNameContinue(nameValue) {
+  setAnswers((prev) => ({ ...prev, name: nameValue }));
+  setScreen("wellnessProfile");
+}
 
   function handleWellnessProfileContinue() {
     setScreen("walkingBenefit");
@@ -423,6 +408,10 @@ export default function TaiChiQuiz() {
     setAnswers((prev) => ({ ...prev, eventDate }));
     setScreen("goalProjection");
   }
+  function handleWellnessProfileContinue() {
+  // Instead of ending or going to a generic page, go to the sales plan
+  setScreen("salesPlan");
+}
 
   if (screen === "age") {
     return <AgeScreen question={ageQuestion} onSelect={handleAgeSelect} />;
@@ -766,6 +755,15 @@ if (screen === "visibleResults") {
         setScreen("emailSent");
       }}
       onBack={() => setScreen("emailCapture")}
+    />
+  );
+}
+
+if (screen === "salesPlan") {
+  return (
+    <SalesPlanScreen 
+      answers={answers} 
+      onPurchase={(planData) => console.log("Plan selected:", planData)} 
     />
   );
 }
